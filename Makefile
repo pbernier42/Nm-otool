@@ -17,18 +17,12 @@ INCLUDES		=	-I $(DIR_INC)
 DIR_NM			=	ft_nm/
 DIR_OTOOL		=	ft_otool/
 
-SRC_INCLUDE		=	ft_nm_otool.h
+SRC_INCLUDE		=	ft_nm_otool.h match_o.h
 
 SRC_NM			=	ft_nm.c
-SRC_OTOOL		=	ft_otool.c
+SRC_OTOOL		=	ft_otool.c print_otool.c read_otool.c
 
 INC				=	$(addprefix $(DIR_INC),$(SRC_INCLUDE))
-
-# ifeq ($(CC),gcc)
-#   libs=$(libs_for_gcc)
-# else
-#   libs=$(normal_libs)
-# endif
 
 SRCS_NM			=	$(addprefix $(DIR_SRC)$(DIR_NM),$(SRC_NM))
 SRCS_OTOOL		=	$(addprefix $(DIR_SRC)$(DIR_OTOOL),$(SRC_OTOOL))

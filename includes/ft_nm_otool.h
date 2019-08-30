@@ -15,42 +15,47 @@
 
 # include <stdio.h>
 
-# include <stdbool.h>
+# include <match_o.h>
 
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
-
+# include <stdbool.h>
 # include <unistd.h>
 
-typedef struct s_header		t_header;
-typedef struct s_segment	t_segment;
 
-struct						s_header
-{
-	unsigned int			magic;
-	int						cputype;
-	int						cpusubtype;
-	unsigned int      		filetype;
-	unsigned int      		ncmds;
-	unsigned int      		sizeofcmds;
-	unsigned int      		flags;
-};
+# define BUFF			16
+# define ERROR			0
+# define MH_MAGIC_64	0xfeedfacf
 
-struct						s_segment
-{
-  unsigned int  cmd;
-  unsigned int  cmdsize;
-  char      	segname[16];
-  unsigned int  vmaddr;
-  unsigned int  vmsize;
-  unsigned int  fileoff;
-  unsigned int  filesize;
-  int			maxprot;
-  int			initprot;
-  unsigned int  nsects;
-  unsigned int  flags;
-};
+# define ALIGN(value)	(value + (!(value % 16) ? 0 : (16 - (value % 16))))
 
+/*
+**	ft_otool.c
+*/
+
+bool		check_usage(int argc, char **argv);
+
+/*
+**	read_otool.c
+*/
+
+# define SIZE_HEADER	ALIGN(sizeof(t_header))
+# define SIZE_SEGMENT	ALIGN(sizeof(t_segment))
+
+bool		read_file(char *file);
+void		read_header(int fd);
+void		read_data(int fd);
+
+/*
+**	print_otool.c
+*/
+
+# define MOD(hex)		(hex % 16)
+# define HEXA_CHAR(hex)	(MOD(hex) > 9 ? MOD(hex) + 'a' - 10 : MOD(hex) + '0');
+
+bool		print_usage(void);
+void		print_count(long long count);
+void		print_data(unsigned char data[BUFF], int read);
 
 #endif
