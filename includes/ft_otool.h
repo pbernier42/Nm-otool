@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_nm_otool.h                                      :+:      :+:    :+:   */
+/*   ft_otool.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pbernier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,12 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_NM_OTOOL_H
-# define FT_NM_OTOOL_H
+#ifndef FT_OTOOL_H
+# define FT_OTOOL_H
 
 # include <stdio.h>
 
-# include <match_o.h>
+# include "match_o.h"
+# include "error_otool.h"
+# include "utils.h"
 
 # include <sys/types.h>
 # include <sys/stat.h>
@@ -24,9 +26,11 @@
 # include <unistd.h>
 
 
-# define BUFF			16
+# define RETURN_SUCESS	0
+# define RETURN_FAIL	-1
+
+# define SIZE_BUFF			16
 # define ERROR			0
-# define MH_MAGIC_64	0xfeedfacf
 
 # define ALIGN(value)	(value + (!(value % 16) ? 0 : (16 - (value % 16))))
 
@@ -34,7 +38,7 @@
 **	ft_otool.c
 */
 
-bool		check_usage(int argc, char **argv);
+int		check_usage(int argc, char **argv);
 
 /*
 **	read_otool.c
@@ -43,9 +47,9 @@ bool		check_usage(int argc, char **argv);
 # define SIZE_HEADER	ALIGN(sizeof(t_header))
 # define SIZE_SEGMENT	ALIGN(sizeof(t_segment))
 
-bool		read_file(char *file);
-void		read_header(int fd);
-void		read_data(int fd);
+int		read_file(char *file);
+// void		read_header(int fd);
+// void		read_data(int fd);
 
 /*
 **	print_otool.c
@@ -54,8 +58,7 @@ void		read_data(int fd);
 # define MOD(hex)		(hex % 16)
 # define HEXA_CHAR(hex)	(MOD(hex) > 9 ? MOD(hex) + 'a' - 10 : MOD(hex) + '0');
 
-bool		print_usage(void);
 void		print_count(long long count);
-void		print_data(unsigned char data[BUFF], int read);
+void		print_data(unsigned char data[SIZE_BUFF], int read);
 
 #endif

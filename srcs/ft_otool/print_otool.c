@@ -10,13 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <ft_nm_otool.h>
-
-bool	print_usage()
-{
-	write(1, "STOP\n", 5);
-	return (0);
-}
+# include <ft_otool.h>
 
 void	print_count(long long count)
 {
@@ -33,7 +27,7 @@ void	print_count(long long count)
 	write (1, ret, 18);
 }
 
-void	print_data(unsigned char data[BUFF], int read)
+void	print_data(unsigned char data[SIZE_BUFF], int read)
 {
 	char			ret[read * 3];
 	short			len;
@@ -41,10 +35,19 @@ void	print_data(unsigned char data[BUFF], int read)
 	len	= 0;
 	while (len < read)
 	{
+		// if (data[len] == '\t' || data[len] == '\n' || data[len] == '\r' || data[len] == '\v' || data[len] == '\f')
+		// 	ret[len] = '|';
+		// else if (data[len] >= ' ')
+		// 	ret[len] = data[len];
+		// else
+		// 	ret[len] = '.';
+
 		ret[(len * 3)] = HEXA_CHAR(data[len] / 16);
 		ret[(len * 3) + 1] = HEXA_CHAR(data[len]);
 		ret[(len * 3) + 2] = len != (read - 1) ? ' ' : '\n';
 		len++;
 	}
+	// ret[len] = '\n';
+	// write(1, ret, read + 1);
 	write(1, ret, read * 3);
 }

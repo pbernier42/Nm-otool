@@ -10,23 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <ft_nm_otool.h>
+# include <ft_otool.h>
 
 int		main(int argc, char **argv)
 {
 	size_t	files;
+	int		ret;
 
-	files = 0;
-	if (!check_usage(argc, argv))
-		return (print_usage());
-	while (read_file(argv[++files]))
-		;
-	return (1);
+	files = 1;
+	if (check_usage(argc, argv))
+		return (RETURN_FAIL);
+	while (argv[files] && !(ret = read_file(argv[files])))
+		++files;
+	return (RETURN_SUCESS);
 }
 
-bool	check_usage(int argc, char **argv)
+int		check_usage(int argc, char **argv)
 {
-	(void)argc;
+	if (argc < 2)
+		return (error_usage());
 	(void)argv;
-	return (1);
+	return (RETURN_SUCESS);
 }

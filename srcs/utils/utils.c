@@ -1,30 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_otool.c                                       :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pbernier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/30 16:12:29 by pbernier          #+#    #+#             */
-/*   Updated: 2019/08/30 16:12:31 by pbernier         ###   ########.fr       */
+/*   Created: 2019/09/03 17:12:09 by pbernier          #+#    #+#             */
+/*   Updated: 2019/09/03 17:12:11 by pbernier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_otool.h>
 
-// void 		print_header(t_header header);
-// void 		print_segment(t_segment segment);
-
-int		read_file(char *file)
+size_t		len_text(char *text)
 {
-	int				fd;
+	size_t	len;
 
-
-	if ((fd = open(file, O_RDONLY)) < 0 )
-		return (error_otool(error_file(fd, file)));
-	//read_header(fd);
-	//read_data(fd);
-	if (close(fd))
-		return (error_otool(ERROR_FILE_CLOSE));
-	return (RETURN_SUCESS);
+	len = 0;
+	while (text && text[len])
+		++len;
+	return (len);
 }

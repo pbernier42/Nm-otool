@@ -1,4 +1,4 @@
 make fclean
 make ft_otool
-echo "\n"
+echo ""
 ./ft_otool $1 $2 $3

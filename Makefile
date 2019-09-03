@@ -16,22 +16,36 @@ INCLUDES		=	-I $(DIR_INC)
 
 DIR_NM			=	ft_nm/
 DIR_OTOOL		=	ft_otool/
+DIR_UTILS		=	utils/
 
-SRC_INCLUDE		=	ft_nm_otool.h match_o.h
+SRC_INCLUDE		=	ft_otool.h \
+					error_otool.h \
+					match_o.h \
+					utils.h
 
 SRC_NM			=	ft_nm.c
-SRC_OTOOL		=	ft_otool.c print_otool.c read_otool.c
+SRC_OTOOL		=	ft_otool.c \
+					print_otool.c \
+					read_otool.c \
+					error_otool.c
+SRC_UTILS		=	utils.c
 
 INC				=	$(addprefix $(DIR_INC),$(SRC_INCLUDE))
 
-SRCS_NM			=	$(addprefix $(DIR_SRC)$(DIR_NM),$(SRC_NM))
-SRCS_OTOOL		=	$(addprefix $(DIR_SRC)$(DIR_OTOOL),$(SRC_OTOOL))
+SRCS_NM			=	$(addprefix $(DIR_SRC)$(DIR_NM),$(SRC_NM)) \
+					$(addprefix $(DIR_SRC)$(DIR_UTILS), $(SRC_UTILS))
+SRCS_OTOOL		=	$(addprefix $(DIR_SRC)$(DIR_OTOOL),$(SRC_OTOOL)) \
+					$(addprefix $(DIR_SRC)$(DIR_UTILS), $(SRC_UTILS))
 
-PATH_OBJ_NM		=	$(DIR_OBJ)$(DIR_NM)
-PATH_OBJ_OTOOL	=	$(DIR_OBJ)$(DIR_OTOOL)
+PATH_OBJ_NM		=	$(DIR_OBJ)$(DIR_NM) \
+					$(DIR_OBJ)$(DIR_UTILS)
+PATH_OBJ_OTOOL	=	$(DIR_OBJ)$(DIR_OTOOL) \
+					$(DIR_OBJ)$(DIR_UTILS)
 
-OBJS_NM			=	$(addprefix $(PATH_OBJ_NM),$(SRC_NM:.c=.o))
-OBJS_OTOOL		=	$(addprefix $(PATH_OBJ_OTOOL),$(SRC_OTOOL:.c=.o))
+OBJS_NM			=	$(addprefix $(DIR_OBJ)$(DIR_NM),$(SRC_NM:.c=.o)) \
+					$(addprefix $(DIR_OBJ)$(DIR_UTILS),$(SRC_UTILS:.c=.o))
+OBJS_OTOOL		=	$(addprefix $(DIR_OBJ)$(DIR_OTOOL),$(SRC_OTOOL:.c=.o)) \
+					$(addprefix $(DIR_OBJ)$(DIR_UTILS),$(SRC_UTILS:.c=.o))
 
 UND				= \033[4m
 RES				= \033[0m
@@ -71,11 +85,14 @@ clean:
 	@rm -rf $(DIR_OBJ)
 #@printf "[ALL] Obj removed.\n"
 
-clean_nm:
+clean_utils:
+	@rm -rf $(PATH_OBJ_UTILS)
+
+clean_nm: clean_utils
 	@rm -rf $(PATH_OBJ_NM)
 #@printf "[$(PROJECT_NM)] Obj removed.\n"
 
-clean_otool:
+clean_otool: clean_utils
 	@rm -rf $(PATH_OBJ_OTOOL)
 #@printf "[$(PROJECT_OTOOL)] Obj removed.\n"
 
