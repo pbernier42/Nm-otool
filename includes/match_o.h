@@ -16,17 +16,18 @@
 # include <ft_otool.h>
 # include <stdint.h>
 
-#define MH_MAGIC     0xfeedface    /* the mach magic number */
-#define MH_CIGAM     0xcefaedfe    /* NXSwapInt(MH_MAGIC) */
+//endian
+# define MH_MAGIC     0xfeedface    /* the mach magic number */
+# define MH_CIGAM     0xcefaedfe    /* NXSwapInt(MH_MAGIC) */
 
-#define MH_MAGIC_64  0xfeedfacf    /* the 64-bit mach magic number */
-#define MH_CIGAM_64  0xcffaedfe    /* NXSwapInt(MH_MAGIC_64) */
+# define MH_MAGIC_64  0xfeedfacf    /* the 64-bit mach magic number */
+# define MH_CIGAM_64  0xcffaedfe    /* NXSwapInt(MH_MAGIC_64) */
 
-#define FAT_MAGIC    0xcafebabe    /* the fat magic number */
-#define FAT_CIGAM    0xbebafeca    /* NXSwapLong(FAT_MAGIC) */
+# define FAT_MAGIC    0xcafebabe    /* the fat magic number */
+# define FAT_CIGAM    0xbebafeca    /* NXSwapLong(FAT_MAGIC) */
 
-#define FAT_MAGIC_64 0xcafebabf    /* the 64-bit fat magic number */
-#define FAT_CIGAM_64 0xbfbafeca    /* NXSwapLong(FAT_MAGIC_64) */
+# define FAT_MAGIC_64 0xcafebabf    /* the 64-bit fat magic number */
+# define FAT_CIGAM_64 0xbfbafeca    /* NXSwapLong(FAT_MAGIC_64) */
 
 
 struct				mach_header	/* struct mach_header_64 for 64-bit */

@@ -24,6 +24,7 @@
 # include <fcntl.h>
 # include <stdbool.h>
 # include <unistd.h>
+# include <sys/mman.h>
 
 
 # define RETURN_SUCESS	0
@@ -32,24 +33,34 @@
 # define SIZE_BUFF			16
 # define ERROR			0
 
-# define ALIGN(value)	(value + (!(value % 16) ? 0 : (16 - (value % 16))))
+// # define ALIGN(value)	(value + (!(value % 16) ? 0 : (16 - (value % 16))))
 
 /*
 **	ft_otool.c
 */
 
-int		check_usage(int argc, char **argv);
+# define NUMBER_FLAGS	1
+# define CHAR_FLAGS		"t"
+# define LEN_FLAGS		len[0]
+# define LEN_ARGV		len[1]
+# define SIZE_ARGV		len[2]
+
+typedef struct s_flags		t_flags;
+
+struct						s_flags
+{
+	bool			text_section;
+};
+
+int		check_usage(int argc, char **argv, t_flags *flags);
+int		check_flags(char *argv, char *flags);
 
 /*
 **	read_otool.c
 */
 
-# define SIZE_HEADER	ALIGN(sizeof(t_header))
-# define SIZE_SEGMENT	ALIGN(sizeof(t_segment))
-
-int		read_file(char *file);
-// void		read_header(int fd);
-// void		read_data(int fd);
+int		open_file(char *file);
+int		read_file(void *data, unsigned long long size_file);
 
 /*
 **	print_otool.c

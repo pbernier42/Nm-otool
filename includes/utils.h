@@ -17,6 +17,10 @@
 **	utils.c
 */
 
+# define	LEN_TEXT
+# define	LEN_TOTAL
+
 size_t		len_text(char *text);
+
 
 #endif
