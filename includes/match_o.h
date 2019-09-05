@@ -16,21 +16,25 @@
 # include <ft_otool.h>
 # include <stdint.h>
 
-//endian
-# define MH_MAGIC     0xfeedface    /* the mach magic number */
-# define MH_CIGAM     0xcefaedfe    /* NXSwapInt(MH_MAGIC) */
+# define MH_MAGIC     0xfeedface
+# define MH_CIGAM     0xcefaedfe
 
-# define MH_MAGIC_64  0xfeedfacf    /* the 64-bit mach magic number */
-# define MH_CIGAM_64  0xcffaedfe    /* NXSwapInt(MH_MAGIC_64) */
+# define MH_MAGIC_64  0xfeedfacf
+# define MH_CIGAM_64  0xcffaedfe
 
-# define FAT_MAGIC    0xcafebabe    /* the fat magic number */
-# define FAT_CIGAM    0xbebafeca    /* NXSwapLong(FAT_MAGIC) */
+# define FAT_MAGIC    0xcafebabe
+# define FAT_CIGAM    0xbebafeca
 
-# define FAT_MAGIC_64 0xcafebabf    /* the 64-bit fat magic number */
-# define FAT_CIGAM_64 0xbfbafeca    /* NXSwapLong(FAT_MAGIC_64) */
+# define FAT_MAGIC_64 0xcafebabf
+# define FAT_CIGAM_64 0xbfbafeca
+
+typedef struct s_mach_head_64		t_mh_head_64;
+typedef struct s_mach_comm			t_mh_comm;
+typedef struct s_mach_segm_64		t_mh_segm_64;
+typedef struct s_mach_sect_64		t_mh_sect_64;
 
 
-struct				mach_header	/* struct mach_header_64 for 64-bit */
+struct				s_mach_head_64	/* struct mach_header_64 for 64-bit */
 {
 	uint32_t		magic;		/* mach magic number identifier */
 	int				cputype;	/* cpu specifier */
@@ -42,19 +46,19 @@ struct				mach_header	/* struct mach_header_64 for 64-bit */
 	uint32_t		reserved;	/* reserved */ 							//exist que pour 64
 };
 
-struct 				load_command /* load_command header */
+struct 				s_mach_comm/* load_command header */
 {
 	uint32_t		cmd;        /* type of load command */
     uint32_t		cmdsize;    /* total size of command in bytes */
 };
 
-struct 				fat_header
+struct 				s_fat_header
 {
 	uint32_t		magic;      /* FAT_MAGIC or FAT_MAGIC_64 */
     uint32_t		nfat_arch;  /* number of structs that follow */
 };
 
-struct 				fat_arch	/* struct fat_arch_64 for 64-bit*/
+struct 				s_fat_arch_64	/* struct fat_arch_64 for 64-bit*/
 {
 	int				cputype;    /* cpu specifier (int) */
 	int				cpusubtype; /* machine specifier (int) */
@@ -66,7 +70,7 @@ struct 				fat_arch	/* struct fat_arch_64 for 64-bit*/
 	uint32_t        reserved;   /* reserved */ 							//exist que pour 64
 };
 
-struct				segment_command/* struct segment_command_64 for 64-bit */
+struct				s_mach_segm_64/* struct segment_command_64 for 64-bit */
 {
 	uint32_t        cmd;         /* LC_SEGMENT or LC_SEGMENT_64 */
     uint32_t        cmdsize;     /* includes sizeof section structs */
@@ -85,7 +89,7 @@ struct				segment_command/* struct segment_command_64 for 64-bit */
     uint32_t        flags;       /* flags */
 };
 
-struct				section
+struct				s_mach_sect_64
 {                   /* struct section_64 for 64-bit */
     char            sectname[16]; /* name of this section */
     char            segname[16];  /* segment this section goes in */

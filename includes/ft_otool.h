@@ -23,53 +23,87 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <stdbool.h>
-# include <unistd.h>
 # include <sys/mman.h>
 
 
-# define RETURN_SUCESS	0
-# define RETURN_FAIL	-1
-
-# define SIZE_BUFF			16
-# define ERROR			0
-
-// # define ALIGN(value)	(value + (!(value % 16) ? 0 : (16 - (value % 16))))
 
 /*
 **	ft_otool.c
 */
 
-# define NUMBER_FLAGS	1
-# define CHAR_FLAGS		"t"
-# define LEN_FLAGS		len[0]
-# define LEN_ARGV		len[1]
-# define SIZE_ARGV		len[2]
-
 typedef struct s_flags		t_flags;
+
+# define NUMBER_FLAGS	2
+# define CHAR_FLAGS		"tl"
 
 struct						s_flags
 {
 	bool			text_section;
+	bool			load_command;
 };
 
-int		check_usage(int argc, char **argv, t_flags *flags);
-int		check_flags(char *argv, char *flags);
+
+# define LEN_FLAGS		len[0]
+# define LEN_ARGV		len[1]
+# define SIZE_ARGV		len[2]
+
+int			check_usage(int argc, char **argv, t_flags *flags);
+int			check_flags(char *argv, char *flags);
+
+/*
+**	open_otool.c
+*/
+
+# define ALL_MAGIC		MH_MAGIC, MH_MAGIC_64, FAT_MAGIC, FAT_MAGIC_64
+# define ALL_CIGAM		MH_CIGAM, MH_CIGAM_64, FAT_CIGAM, FAT_CIGAM_64
+# define TAB_MAGIC		((uint32_t[8]){ALL_MAGIC, ALL_CIGAM})
+# define ALL_FT			NULL, read_match_64, NULL, NULL
+# define TAB_FT			((int ((*[4])(void *, t_ull, bool, t_eflags))){ALL_FT})
+
+typedef enum e_flags	t_eflags;
+
+enum					e_flags
+{
+	e_text_section,
+	e_load_command,
+	e_no_flags
+};
+
+int			open_file(char *file, t_flags *flags);
+int			type_file(char *file, void *data, t_ull size_file, t_flags *flags);
+t_eflags	what_flag(char *flags);
 
 /*
 **	read_otool.c
 */
 
-int		open_file(char *file);
-int		read_file(void *data, unsigned long long size_file);
+# define COUNT_COMMAND		count[0]
+# define COUNT_SECTION		count[1]
+# define SIZE_MH_HEAD_64	sizeof(t_mh_head_64)
+# define SIZE_MH_SEGM_64	sizeof(t_mh_segm_64)
+# define TEXT_SECT			"__text"
+# define TEXT_SEG			"__TEXT"
+
+int			read_match_64(void *data, t_ull size_file, bool endian,
+	t_eflags flag);
+int			read_text(void *data, t_ull size);
+bool		same_text(char text[16], char check[16]);
 
 /*
 **	print_otool.c
 */
 
-# define MOD(hex)		(hex % 16)
-# define HEXA_CHAR(hex)	(MOD(hex) > 9 ? MOD(hex) + 'a' - 10 : MOD(hex) + '0');
+# define CHAR_SPACE		"            "
 
-void		print_count(long long count);
-void		print_data(unsigned char data[SIZE_BUFF], int read);
+# define LC_SEGMENT 	0x1
+# define LC_SEGMENT_64	0x19
+
+void 	print_header(void *data);
+void 	print_command(void *data);
+void	print_section(void *data);
+void	print_data(unsigned char data[16], short size);
+
+// void		print_count(t_ull count);
+// void		print_data(unsigned char data[SIZE_BUFF], int read);
 
 #endif

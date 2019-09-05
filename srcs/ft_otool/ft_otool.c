@@ -19,7 +19,7 @@ int		main(int argc, char **argv)
 
 	if ((files = check_usage(argc, argv, &flags)) == RETURN_FAIL)
 		return (RETURN_FAIL);
-	while (argv[files] && !open_file(argv[files]))
+	while (argv[files] && !open_file(argv[files], &flags))
 		++files;
 	return (RETURN_SUCESS);
 }

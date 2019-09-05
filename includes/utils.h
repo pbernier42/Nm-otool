@@ -13,14 +13,27 @@
 #ifndef UTILS_H
 # define UTILS_H
 
+# include <unistd.h>
+
+typedef unsigned long long		t_ull;
+
+# define RETURN_SUCESS	0
+# define RETURN_FAIL	-1
+
+# define CHAR_HEXA	((char[16]){"0123456789abcdef"})
+
 /*
-**	utils.c
+**	count.c
 */
 
-# define	LEN_TEXT
-# define	LEN_TOTAL
-
 size_t		len_text(char *text);
+short		size_number(t_ull number);
 
+/*
+**	print.c
+*/
+
+void		print_address(t_ull adress, short size);
+void		print_number(t_ull number);
 
 #endif

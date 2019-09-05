@@ -53,16 +53,6 @@ void 		print_segment(t_segment segment)
 			segment.initprot, segment.nsects, segment.flags);
 }
 
-// bool		check_segname(char seg_name[16], char check[16])
-// {
-// 	short	i;
-//
-// 	i = 0;
-// 	while (seg_name[i] == check[i] && check[i] && i < 16)
-// 		++i;
-// 	return ((i == 16 || !check[i]) ? true : false);
-// }
-
 // void	tmp(int fd, int len, unsigned char buff[BUFF], long long count)
 // {
 // 	t_header	tmp[1];
