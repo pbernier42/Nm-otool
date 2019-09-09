@@ -33,6 +33,9 @@ typedef struct s_mach_comm			t_mh_comm;
 typedef struct s_mach_segm_64		t_mh_segm_64;
 typedef struct s_mach_sect_64		t_mh_sect_64;
 
+typedef struct s_fat_head			t_ft_head;
+typedef struct s_fat_arch_64		t_ft_arch_64;
+
 
 struct				s_mach_head_64	/* struct mach_header_64 for 64-bit */
 {

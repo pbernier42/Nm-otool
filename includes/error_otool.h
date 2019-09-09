@@ -36,6 +36,7 @@ enum						e_errno
 	error_file_unknown,
 	error_file_close,
 	error_file_type,
+	error_file_text,
 	error_alloc_mmap,
 	error_alloc_munmap,
 	error_corrupt_empty
@@ -57,6 +58,7 @@ struct						s_error
 # define E_UNKN		error_file_unknown
 # define E_CLOS		error_file_close
 # define E_TYPE		error_file_type
+# define E_TEXT		error_file_text
 # define E_MMAP		error_alloc_mmap
 # define E_MUNM		error_alloc_munmap
 # define E_EMPT		error_corrupt_empty
@@ -70,6 +72,7 @@ struct						s_error
 # define T_UNKN		"Unknown open error"
 # define T_CLOS		"Didn't close"
 # define T_TYPE		"is not an object file"
+# define T_TEXT		"(" TEXT_SEG "," TEXT_SECT ") not found"
 # define T_MMAP		"Fail to mmap"
 # define T_MUNM		"Fail to munmap"
 # define T_EMPT		"Empty file"
@@ -84,6 +87,7 @@ struct						s_error
 # define ERROR_FILE_UNKNOWN			((t_error){T_UNKN, E_UNKN})
 # define ERROR_FILE_CLOSE			((t_error){T_CLOS, E_CLOS})
 # define ERROR_FILE_TYPE			((t_error){T_TYPE, E_TYPE})
+# define ERROR_FILE___TEXT			((t_error){T_TEXT, E_TEXT})
 # define ERROR_ALLOC_MMAP			((t_error){T_MMAP, E_MMAP})
 # define ERROR_ALLOC_MUNMAP			((t_error){T_MUNM, E_MUNM})
 # define ERROR_CORRUPT_EMPTY		((t_error){T_EMPT, E_EMPT})

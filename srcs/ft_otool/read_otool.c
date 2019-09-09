@@ -16,13 +16,14 @@ int		read_match_64(void *data, t_ull size_file, bool endian, t_eflags flag)
 {
 	uint32_t		count[2];
 	void			*command;
-	s_mach_sect_64	*section;
+	t_mh_sect_64	*section;
 
 	//ATTENTO CORROMPU
 	//endian
 	COUNT_COMMAND = 0;
 	if (flag == e_load_command)
 		print_header(data);
+
 	command = data + SIZE_MH_HEAD_64;
 	while (COUNT_COMMAND++ < ((t_mh_head_64*)data)->ncmds)
 	{
@@ -37,7 +38,8 @@ int		read_match_64(void *data, t_ull size_file, bool endian, t_eflags flag)
 				if (flag == e_text_section
 					&& same_text(section->sectname, TEXT_SECT)
 					&& same_text(section->segname, TEXT_SEG))
-					return (read_text(data + section->offset, section->size));
+					return (read_text(data + section->offset,
+						section->addr, section->size));
 				if (flag == e_load_command)
 					print_section(section);
 				++section;
@@ -46,24 +48,72 @@ int		read_match_64(void *data, t_ull size_file, bool endian, t_eflags flag)
 		command += ((t_mh_comm*)command)->cmdsize;
 	}
 	if (flag == e_text_section)
-		return (-1);
-
+		return (error_otool(ERROR_FILE___TEXT));
 	(void)size_file;
 	(void)endian;
 	return (RETURN_SUCESS);
 }
 
-int		read_text(void *data, t_ull size)
+int		read_fat_64(void *data, t_ull size_file, bool endian, t_eflags flag)
 {
-	t_ull	address;
+	uint32_t		count[2];
 
-	adress = 0;
-	while (adress < size)
+	//ATTENTO CORROMPU
+	//endian
+	COUNT_COMMAND = 0;
+	if (flag == e_load_command)
+		print_header(data);
+
+
+	printf("?[%d]\n", endian);
+	// command = data + SIZE_MH_HEAD_64;
+	// while (COUNT_COMMAND++ < ((t_mh_head_64*)data)->ncmds)
+	// {
+	// 	COUNT_SECTION = 0;
+	// 	if (flag == e_load_command)
+	// 		print_command(command);
+	// 	if (((t_mh_comm*)command)->cmd == LC_SEGMENT_64)
+	// 	{
+	// 		section = command + SIZE_MH_SEGM_64;
+	// 		while (COUNT_SECTION++ < ((t_mh_segm_64*)command)->nsects)
+	// 		{
+	// 			if (flag == e_text_section
+	// 				&& same_text(section->sectname, TEXT_SECT)
+	// 				&& same_text(section->segname, TEXT_SEG))
+	// 				return (read_text(data + section->offset,
+	// 					section->addr, section->size));
+	// 			if (flag == e_load_command)
+	// 				print_section(section);
+	// 			++section;
+	// 		}
+	// 	}
+	// 	command += ((t_mh_comm*)command)->cmdsize;
+	// }
+	// if (flag == e_text_section)
+	// 	return (-1);
+
+	(void)data;
+	(void)flag;
+	(void)size_file;
+	(void)endian;
+	return (RETURN_SUCESS);
+}
+
+
+int		read_text(void *data, t_ull offset, t_ull size)
+{
+	t_ull	count;
+
+	count = 0;
+	write(1, "Contents of (" TEXT_SEG "," TEXT_SECT ") section\n", 36);
+	while (count < size)
 	{
-		print_address(adress, 8);
-		print_data(&(data + address),
-			(size - address) <= 16 ? (size - address) : 16);
-		adress += 16;
+		print_address(offset, 16, false);
+		write(1, "\t", 1);
+		print_data((data + count),
+			(size - count) <= 16 ? (size - count) : 16);
+		count += 16;
+		offset += 16;
 	}
 	return (RETURN_SUCESS);
 }

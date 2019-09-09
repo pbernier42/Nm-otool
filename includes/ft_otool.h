@@ -22,7 +22,6 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
-# include <stdbool.h>
 # include <sys/mman.h>
 
 
@@ -57,7 +56,7 @@ int			check_flags(char *argv, char *flags);
 # define ALL_MAGIC		MH_MAGIC, MH_MAGIC_64, FAT_MAGIC, FAT_MAGIC_64
 # define ALL_CIGAM		MH_CIGAM, MH_CIGAM_64, FAT_CIGAM, FAT_CIGAM_64
 # define TAB_MAGIC		((uint32_t[8]){ALL_MAGIC, ALL_CIGAM})
-# define ALL_FT			NULL, read_match_64, NULL, NULL
+# define ALL_FT			NULL, read_match_64, read_fat_64, read_fat_64
 # define TAB_FT			((int ((*[4])(void *, t_ull, bool, t_eflags))){ALL_FT})
 
 typedef enum e_flags	t_eflags;
@@ -86,7 +85,10 @@ t_eflags	what_flag(char *flags);
 
 int			read_match_64(void *data, t_ull size_file, bool endian,
 	t_eflags flag);
-int			read_text(void *data, t_ull size);
+int			read_fat_64(void *data, t_ull size_file, bool endian,
+	t_eflags flag);
+
+int			read_text(void *data, t_ull address, t_ull size);
 bool		same_text(char text[16], char check[16]);
 
 /*

@@ -20,6 +20,7 @@ int		open_file(char *file, t_flags *flags)
 	int			ret;
 
 	INIT(file);
+	// printf("[%d][%d]\n", flags->text_section, flags->load_command);
 	if ((fd = open(file, O_RDONLY)) < 0)
 		return (error_otool(error_open(fd)));
 	if (fstat(fd, &buf) != 0)
@@ -47,7 +48,7 @@ int		type_file(char *file, void *data, t_ull size_file, t_flags *flags)
 	short		i;
 	t_eflags	flag;
 
-	(void)flags;
+	// printf("[%d][%d]\n", flags->text_section, flags->load_command);
 	if (!data)
 		return (error_otool(ERROR_CORRUPT_EMPTY));
 	magic = data;
@@ -56,10 +57,13 @@ int		type_file(char *file, void *data, t_ull size_file, t_flags *flags)
 		++i;
 	if (i == 8)
 		return (error_otool(ERROR_FILE_TYPE));
+
 	while ((flag = what_flag((char *)flags)) != e_no_flags)
 	{
 		write(1, file, len_text(file));
-		write(1, "\n", 1);
+		write(1, ":\n", 2);
+
+		printf("[%d][%d]\n", i, i % 4);
 		if (TAB_FT[i % 4](data, size_file, (i >= 4) ? true : false, flag))
 			return (RETURN_FAIL);
 	}

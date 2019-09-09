@@ -14,6 +14,7 @@
 # define UTILS_H
 
 # include <unistd.h>
+# include <stdbool.h>
 
 typedef unsigned long long		t_ull;
 
@@ -33,7 +34,7 @@ short		size_number(t_ull number);
 **	print.c
 */
 
-void		print_address(t_ull adress, short size);
+void		print_address(t_ull adress, short size, bool ox);
 void		print_number(t_ull number);
 
 #endif

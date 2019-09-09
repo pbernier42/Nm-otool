@@ -12,7 +12,7 @@
 
 #include <ft_otool.h>
 
-void		print_address(t_ull adress, short size)
+void		print_address(t_ull adress, short size, bool ox)
 {
 	char		ret[size];
 	short		len;
@@ -23,7 +23,8 @@ void		print_address(t_ull adress, short size)
 		ret[len] = CHAR_HEXA[adress % 16];
 		adress /= 16;
 	}
-	write(1, "0x", 2);
+	if (ox)
+		write(1, "0x", 2);
 	write(1, ret, size);
 }
 

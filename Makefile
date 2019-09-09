@@ -29,7 +29,8 @@ SRC_OTOOL		=	ft_otool.c \
 					open_otool.c \
 					error_otool.c \
 					read_otool.c
-SRC_UTILS		=	utils.c
+SRC_UTILS		=	count.c \
+					print.c
 
 INC				=	$(addprefix $(DIR_INC),$(SRC_INCLUDE))
 
