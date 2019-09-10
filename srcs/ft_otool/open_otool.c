@@ -53,18 +53,18 @@ int		type_file(char *file, void *data, t_ull size_file, t_flags *flags)
 		return (error_otool(ERROR_CORRUPT_EMPTY));
 	magic = data;
 	i = 0;
-	while (i < 8 && *magic != TAB_MAGIC[i])
+	while (i < (NUM_TYPE * 2) && *magic != TAB_MAGIC[i])
 		++i;
-	if (i == 8)
+	if (i == (NUM_TYPE * 2))
 		return (error_otool(ERROR_FILE_TYPE));
-
 	while ((flag = what_flag((char *)flags)) != e_no_flags)
 	{
 		write(1, file, len_text(file));
 		write(1, ":\n", 2);
 
-		printf("[%d][%d]\n", i, i % 4);
-		if (TAB_FT[i % 4](data, size_file, (i >= 4) ? true : false, flag))
+		printf("[%d][%d]\n", i, i % NUM_TYPE);
+		if (TAB_FT[i % NUM_TYPE](data, size_file,
+			(i >= NUM_TYPE) ? true : false, flag))
 			return (RETURN_FAIL);
 	}
 	return (RETURN_SUCESS);

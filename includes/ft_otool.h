@@ -52,12 +52,12 @@ int			check_flags(char *argv, char *flags);
 /*
 **	open_otool.c
 */
-
-# define ALL_MAGIC		MH_MAGIC, MH_MAGIC_64, FAT_MAGIC, FAT_MAGIC_64
-# define ALL_CIGAM		MH_CIGAM, MH_CIGAM_64, FAT_CIGAM, FAT_CIGAM_64
-# define TAB_MAGIC		((uint32_t[8]){ALL_MAGIC, ALL_CIGAM})
-# define ALL_FT			NULL, read_match_64, read_fat_64, read_fat_64
-# define TAB_FT			((int ((*[4])(void *, t_ull, bool, t_eflags))){ALL_FT})
+# define NUM_TYPE	5
+# define ALL_MAGIC		MH_MAGIC, MH_MAGIC_64, FAT_MAGIC, FAT_MAGIC_64, ARC_MAGIC
+# define ALL_CIGAM		MH_CIGAM, MH_CIGAM_64, FAT_CIGAM, FAT_CIGAM_64, ARC_CIGAM
+# define TAB_MAGIC		((uint32_t[NUM_TYPE * 2]){ALL_MAGIC, ALL_CIGAM})
+# define ALL_FT			read_match_64, read_match_64, read_fat_64, read_fat_64, NULL
+# define TAB_FT			((int ((*[NUM_TYPE])(void *, t_ull, bool, t_eflags))){ALL_FT})
 
 typedef enum e_flags	t_eflags;
 

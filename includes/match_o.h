@@ -16,17 +16,20 @@
 # include <ft_otool.h>
 # include <stdint.h>
 
-# define MH_MAGIC     0xfeedface
-# define MH_CIGAM     0xcefaedfe
+# define MH_MAGIC    	0xfeedface
+# define MH_CIGAM    	0xcefaedfe
 
-# define MH_MAGIC_64  0xfeedfacf
-# define MH_CIGAM_64  0xcffaedfe
+# define MH_MAGIC_64  	0xfeedfacf
+# define MH_CIGAM_64  	0xcffaedfe
 
-# define FAT_MAGIC    0xcafebabe
-# define FAT_CIGAM    0xbebafeca
+# define FAT_MAGIC   	0xcafebabe
+# define FAT_CIGAM    	0xbebafeca
 
-# define FAT_MAGIC_64 0xcafebabf
-# define FAT_CIGAM_64 0xbfbafeca
+# define FAT_MAGIC_64	0xcafebabf
+# define FAT_CIGAM_64	0xbfbafeca
+
+# define ARC_MAGIC		0x72613c21
+# define ARC_CIGAM		0x213c6172
 
 typedef struct s_mach_head_64		t_mh_head_64;
 typedef struct s_mach_comm			t_mh_comm;

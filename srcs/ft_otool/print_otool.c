@@ -93,8 +93,13 @@ void	print_data(unsigned char data[16], short size)
  	short			len;
 
  	len	= 0;
+		// write(1, " |", 2);
  	while (len < size)
  	{
+		// if (data[len] >= 128 || data[len] <= 32)
+		// 	write(1, ".", 1);
+		// else
+		// 	write(1, &data[len], 1);
 		ret[(len * 3)] = CHAR_HEXA[data[len] / 16];
  		ret[(len * 3) + 1] = CHAR_HEXA[data[len] % 16];
  		ret[(len * 3) + 2] = ' ';
@@ -102,4 +107,5 @@ void	print_data(unsigned char data[16], short size)
 	}
 	ret[(size * 3)] = '\n';
  	write(1, ret, (size * 3) + 1);
+	// write(1, "|\n", 2);
 }
