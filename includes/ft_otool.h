@@ -34,6 +34,8 @@ typedef struct s_flags		t_flags;
 
 # define NUMBER_FLAGS	2
 # define CHAR_FLAGS		"tl"
+# define RESET_FLAGS	((t_flags){0, 0})
+# define DONE_FLAGS		((bool*)&done)
 
 struct						s_flags
 {
@@ -56,7 +58,7 @@ int			check_flags(char *argv, char *flags);
 # define ALL_MAGIC		MH_MAGIC, MH_MAGIC_64, FAT_MAGIC, FAT_MAGIC_64, ARC_MAGIC
 # define ALL_CIGAM		MH_CIGAM, MH_CIGAM_64, FAT_CIGAM, FAT_CIGAM_64, ARC_CIGAM
 # define TAB_MAGIC		((uint32_t[NUM_TYPE * 2]){ALL_MAGIC, ALL_CIGAM})
-# define ALL_FT			read_match_64, read_match_64, read_fat_64, read_fat_64, NULL
+# define ALL_FT			read_match_32, read_match_64, read_fat_64, read_fat_64, NULL
 # define TAB_FT			((int ((*[NUM_TYPE])(void *, t_ull, bool, t_eflags))){ALL_FT})
 
 typedef enum e_flags	t_eflags;
@@ -80,11 +82,16 @@ t_eflags	what_flag(char *flags);
 # define COUNT_SECTION		count[1]
 # define SIZE_MH_HEAD_64	sizeof(t_mh_head_64)
 # define SIZE_MH_SEGM_64	sizeof(t_mh_segm_64)
+
 # define TEXT_SECT			"__text"
 # define TEXT_SEG			"__TEXT"
 
 int			read_match_64(void *data, t_ull size_file, bool endian,
 	t_eflags flag);
+
+int			read_match_32(void *data, t_ull size_file, bool endian,
+	t_eflags flag);
+
 int			read_fat_64(void *data, t_ull size_file, bool endian,
 	t_eflags flag);
 

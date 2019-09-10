@@ -61,8 +61,6 @@ int		type_file(char *file, void *data, t_ull size_file, t_flags *flags)
 	{
 		write(1, file, len_text(file));
 		write(1, ":\n", 2);
-
-		printf("[%d][%d]\n", i, i % NUM_TYPE);
 		if (TAB_FT[i % NUM_TYPE](data, size_file,
 			(i >= NUM_TYPE) ? true : false, flag))
 			return (RETURN_FAIL);
@@ -72,12 +70,16 @@ int		type_file(char *file, void *data, t_ull size_file, t_flags *flags)
 
 t_eflags		what_flag(char *flags)
 {
-	t_eflags	flag;
+	t_eflags		flag;
+	static t_flags	done = RESET_FLAGS;
 
 	flag = 0;
-	while (flag != e_no_flags && !flags[flag])
+	while (flag != e_no_flags
+		&& (!flags[flag] || (flags[flag] && DONE_FLAGS[flag])))
 		++flag;
-	if (flag != e_no_flags && flags[flag])
-		flags[flag] = 0;
+	if (flag != e_no_flags && !(DONE_FLAGS[flag]))
+		DONE_FLAGS[flag] = 1;
+	if (flag == e_no_flags)
+		done = RESET_FLAGS;
 	return (flag);
 }
