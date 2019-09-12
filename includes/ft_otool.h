@@ -27,7 +27,7 @@
 
 
 /*
-**	ft_otool.c
+**	main_otool.c
 */
 
 typedef struct s_flags		t_flags;
@@ -54,12 +54,13 @@ int			check_flags(char *argv, char *flags);
 /*
 **	open_otool.c
 */
-# define NUM_TYPE	5
+
+# define NUM_TYPE		5
 # define ALL_MAGIC		MH_MAGIC, MH_MAGIC_64, FAT_MAGIC, FAT_MAGIC_64, ARC_MAGIC
 # define ALL_CIGAM		MH_CIGAM, MH_CIGAM_64, FAT_CIGAM, FAT_CIGAM_64, ARC_CIGAM
 # define TAB_MAGIC		((uint32_t[NUM_TYPE * 2]){ALL_MAGIC, ALL_CIGAM})
-# define ALL_FT			read_match_32, read_match_64, read_fat_64, read_fat_64, NULL
-# define TAB_FT			((int ((*[NUM_TYPE])(void *, t_ull, bool, t_eflags))){ALL_FT})
+# define ALL_FT			NULL, read_match_64, NULL, NULL, NULL
+# define TAB_FT			((int ((*[NUM_TYPE])(void *, bool, t_eflags))){ALL_FT})
 
 typedef enum e_flags	t_eflags;
 
@@ -71,7 +72,7 @@ enum					e_flags
 };
 
 int			open_file(char *file, t_flags *flags);
-int			type_file(char *file, void *data, t_ull size_file, t_flags *flags);
+int			type_file(char *file, void *data, t_flags *flags);
 t_eflags	what_flag(char *flags);
 
 /*
@@ -86,14 +87,7 @@ t_eflags	what_flag(char *flags);
 # define TEXT_SECT			"__text"
 # define TEXT_SEG			"__TEXT"
 
-int			read_match_64(void *data, t_ull size_file, bool endian,
-	t_eflags flag);
-
-int			read_match_32(void *data, t_ull size_file, bool endian,
-	t_eflags flag);
-
-int			read_fat_64(void *data, t_ull size_file, bool endian,
-	t_eflags flag);
+int			read_match_64(void *data, bool endian, t_eflags flag);
 
 int			read_text(void *data, t_ull address, t_ull size);
 bool		same_text(char text[16], char check[16]);
@@ -112,7 +106,8 @@ void 	print_command(void *data);
 void	print_section(void *data);
 void	print_data(unsigned char data[16], short size);
 
-// void		print_count(t_ull count);
-// void		print_data(unsigned char data[SIZE_BUFF], int read);
+/*
+**	flag_l_otool.c
+*/
 
 #endif

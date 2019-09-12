@@ -19,7 +19,7 @@ int		open_file(char *file, t_flags *flags)
 	void		*data;
 	int			ret;
 
-	INIT(file);
+	ERROR_INIT(file);
 	// printf("[%d][%d]\n", flags->text_section, flags->load_command);
 	if ((fd = open(file, O_RDONLY)) < 0)
 		return (error_otool(error_open(fd)));
@@ -35,20 +35,20 @@ int		open_file(char *file, t_flags *flags)
 		return (error_otool(ERROR_FILE_CLOSE));
 	if (data == MAP_FAILED)
 		return (RETURN_FAIL);
-	if (type_file(file, data, buf.st_size, flags))
+	(void)buf.st_size;
+	if (type_file(file, data, flags))
 		return (RETURN_FAIL);
 	if (munmap(data, buf.st_size))
 		return(error_otool(ERROR_ALLOC_MUNMAP));
 	return (RETURN_SUCESS);
 }
 
-int		type_file(char *file, void *data, t_ull size_file, t_flags *flags)
+int		type_file(char *file, void *data, t_flags *flags)
 {
 	uint32_t	*magic;
 	short		i;
 	t_eflags	flag;
 
-	// printf("[%d][%d]\n", flags->text_section, flags->load_command);
 	if (!data)
 		return (error_otool(ERROR_CORRUPT_EMPTY));
 	magic = data;
@@ -61,8 +61,9 @@ int		type_file(char *file, void *data, t_ull size_file, t_flags *flags)
 	{
 		write(1, file, len_text(file));
 		write(1, ":\n", 2);
-		if (TAB_FT[i % NUM_TYPE](data, size_file,
-			(i >= NUM_TYPE) ? true : false, flag))
+		if (flag != e_text_section)
+			return (RETURN_FAIL);
+		if (TAB_FT[i % NUM_TYPE](data, (i >= NUM_TYPE) ? true : false, flag))
 			return (RETURN_FAIL);
 	}
 	return (RETURN_SUCESS);

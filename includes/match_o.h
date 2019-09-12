@@ -73,23 +73,23 @@ struct 				s_mach_comm/* load_command header */
     uint32_t		cmdsize;    /* total size of command in bytes */
 };
 
-struct 				s_fat_header
-{
-	uint32_t		magic;      /* FAT_MAGIC or FAT_MAGIC_64 */
-    uint32_t		nfat_arch;  /* number of structs that follow */
-};
-
-struct 				s_fat_arch_64	/* struct fat_arch_64 for 64-bit*/
-{
-	int				cputype;    /* cpu specifier (int) */
-	int				cpusubtype; /* machine specifier (int) */
-	// uint32_t        offset;     /* file offset to this object file *///exist que pour 32
-	// uint32_t        size;       /* size of this object file */		//exist que pour 32
-	uint64_t        offset;     /* file offset to this object file */	//exist que pour 64
-	uint64_t        size;       /* size of this object file */			//exist que pour 64
-    uint32_t        align;      /* alignment as a power of 2 */
-	uint32_t        reserved;   /* reserved */ 							//exist que pour 64
-};
+// struct 				s_fat_header
+// {
+// 	uint32_t		magic;      /* FAT_MAGIC or FAT_MAGIC_64 */
+//     uint32_t		nfat_arch;  /* number of structs that follow */
+// };
+//
+// struct 				s_fat_arch_64	/* struct fat_arch_64 for 64-bit*/
+// {
+// 	int				cputype;    /* cpu specifier (int) */
+// 	int				cpusubtype; /* machine specifier (int) */
+// 	// uint32_t        offset;     /* file offset to this object file *///exist que pour 32
+// 	// uint32_t        size;       /* size of this object file */		//exist que pour 32
+// 	uint64_t        offset;     /* file offset to this object file */	//exist que pour 64
+// 	uint64_t        size;       /* size of this object file */			//exist que pour 64
+//     uint32_t        align;      /* alignment as a power of 2 */
+// 	uint32_t        reserved;   /* reserved */ 							//exist que pour 64
+// };
 
 struct				s_mach_segm_32
 {

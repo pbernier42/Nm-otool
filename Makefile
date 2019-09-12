@@ -24,7 +24,7 @@ SRC_INCLUDE		=	ft_otool.h \
 					utils.h
 
 SRC_NM			=	ft_nm.c
-SRC_OTOOL		=	ft_otool.c \
+SRC_OTOOL		=	main_otool.c \
 					print_otool.c \
 					open_otool.c \
 					error_otool.c \

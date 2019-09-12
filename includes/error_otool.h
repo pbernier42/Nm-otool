@@ -77,7 +77,6 @@ struct						s_error
 # define T_MUNM		"Fail to munmap"
 # define T_EMPT		"Empty file"
 
-# define ERROR_INIT(file)			((t_error){file, E_INIT})
 # define ERROR_USAGE_NO_FILE		((t_error){T_NO_F, E_NO_F})
 # define ERROR_USAGE_FLAG			((t_error){T_FLAG, E_FLAG})
 # define ERROR_USAGE_UNKNOWN_CHAR	((t_error){T_UN_C, E_UN_C})
@@ -92,7 +91,7 @@ struct						s_error
 # define ERROR_ALLOC_MUNMAP			((t_error){T_MUNM, E_MUNM})
 # define ERROR_CORRUPT_EMPTY		((t_error){T_EMPT, E_EMPT})
 
-# define INIT(file)		error_otool(ERROR_INIT(file))
+# define ERROR_INIT(file)			error_otool(((t_error){file, E_INIT}))
 
 int			error_usage(void);
 t_error		error_open(int fd);

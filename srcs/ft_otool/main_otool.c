@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_otool.c                                         :+:      :+:    :+:   */
+/*   main_otool.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pbernier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -28,7 +28,7 @@ int		check_usage(int argc, char **argv, t_flags *flags)
 {
 	int		len;
 
-	INIT(NULL);
+	ERROR_INIT(NULL);
 	if (argc < 2)
 		return (error_usage());
 	len = 1;
