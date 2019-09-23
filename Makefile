@@ -19,40 +19,42 @@ DIR_OTOOL		=	ft_otool/
 DIR_UTILS		=	utils/
 
 SRC_INCLUDE		=	ft_otool.h \
-					error_otool.h \
-					match_o.h \
-					utils.h
+					error.h \
+					utils.h \
+					struct.h
 
-SRC_NM			=	ft_nm.c
+SRC_NM			=	main_nm.c
 SRC_OTOOL		=	main_otool.c \
 					print_otool.c \
 					open_otool.c \
 					error_otool.c \
 					read_otool.c
 SRC_UTILS		=	count.c \
-					print.c
+					print.c \
+					erroc.c
 
 INC				=	$(addprefix $(DIR_INC),$(SRC_INCLUDE))
 
-SRCS_NM			=	$(addprefix $(DIR_SRC)$(DIR_NM),$(SRC_NM)) \
-					$(addprefix $(DIR_SRC)$(DIR_UTILS), $(SRC_UTILS))
-SRCS_OTOOL		=	$(addprefix $(DIR_SRC)$(DIR_OTOOL),$(SRC_OTOOL)) \
-					$(addprefix $(DIR_SRC)$(DIR_UTILS), $(SRC_UTILS))
+SRCS_NM			=	$(addprefix $(DIR_SRC)$(DIR_NM), $(SRC_NM))
+SRCS_OTOOL		=	$(addprefix $(DIR_SRC)$(DIR_OTOOL), $(SRC_OTOOL))
+SRCS_UTILS		=	$(addprefix $(DIR_SRC)$(DIR_UTILS), $(SRC_UTILS))
 
-PATH_OBJ_NM		=	$(DIR_OBJ)$(DIR_NM) \
-					$(DIR_OBJ)$(DIR_UTILS)
-PATH_OBJ_OTOOL	=	$(DIR_OBJ)$(DIR_OTOOL) \
-					$(DIR_OBJ)$(DIR_UTILS)
+PATH_OBJ_NM		=	$(DIR_OBJ)$(DIR_NM)
+PATH_OBJ_UTILS	=	$(DIR_OBJ)$(DIR_UTILS)
+PATH_OBJ_OTOOL	=	$(DIR_OBJ)$(DIR_OTOOL)
+PATH_OBJ_ALL	=	$(PATH_OBJ_NM) $(PATH_OBJ_UTILS) $(PATH_OBJ_OTOOL)
 
-OBJS_NM			=	$(addprefix $(DIR_OBJ)$(DIR_NM),$(SRC_NM:.c=.o)) \
-					$(addprefix $(DIR_OBJ)$(DIR_UTILS),$(SRC_UTILS:.c=.o))
-OBJS_OTOOL		=	$(addprefix $(DIR_OBJ)$(DIR_OTOOL),$(SRC_OTOOL:.c=.o)) \
-					$(addprefix $(DIR_OBJ)$(DIR_UTILS),$(SRC_UTILS:.c=.o))
+OBJS_NM			=	$(addprefix $(PATH_OBJ_NM),$(SRC_NM:.c=.o))
+OBJS_UTILS		=	$(addprefix $(PATH_OBJ_UTILS),$(SRC_UTILS:.c=.o))
+OBJS_OTOOL		=	$(addprefix $(PATH_OBJ_OTOOL),$(SRC_OTOOL:.c=.o))
+
+
+
 
 UND				= \033[4m
 RES				= \033[0m
 
-all: $(NAME_NM) $(NAME_OTOOL)
+all: $(NAME_NM)
 ifeq ($(NO_TO_BE),OFF)
 	@echo > /dev/null
 endif
@@ -66,22 +68,26 @@ endif
 # 	@printf "  re		-- $(UND)fclean$(RES) then $(UND)make$(RES)\n"
 
 $(NAME_NM): $(PATH_OBJ_NM) $(OBJS_NM)
+
 	@printf "[$(PROJECT_NM)] Objs compilation done.                    \n"
 	@$(CC) -o $(NAME_NM) $(FLAGS) $(OBJS_NM)
 	@printf "[$(PROJECT_NM)] $(NAME_NM) compiled.\n"
 
-$(NAME_OTOOL): $(PATH_OBJ_OTOOL) $(OBJS_OTOOL)
-	@printf "[$(PROJECT_OTOOL)] Objs compilation done.                    \n"
-	@$(CC) -o $(NAME_OTOOL) $(FLAGS) $(OBJS_OTOOL)
-	@printf "[$(PROJECT_OTOOL)] $(NAME_OTOOL) compiled.\n"
+# $(NAME_OTOOL): $(PATH_OBJ_OTOOL) $(OBJS_OTOOL)
+# 	@printf "[$(PROJECT_OTOOL)] Objs compilation done.                    \n"
+# 	@$(CC) -o $(NAME_OTOOL) $(FLAGS) $(OBJS_OTOOL)
+# 	@printf "[$(PROJECT_OTOOL)] $(NAME_OTOOL) compiled.\n"
 
 $(DIR_OBJ)%.o: $(DIR_SRC)%.c $(INC) Makefile
 	@printf "[???] Compiling $(notdir $<) to $(notdir $@)              \r"
 	@$(CC) $(FLAGS) $(INCLUDES) -o $@ -c $<
 
-$(DIR_OBJ)%:
-	@mkdir -p $(DIR_OBJ)
-	@mkdir -p $@
+$(PATH_OBJ_ALL):
+	mkdir -p $@
+
+
+
+
 
 clean:
 	@rm -rf $(DIR_OBJ)
@@ -107,7 +113,6 @@ fclean_nm : clean_nm
 fclean_otool : clean_otool
 	@rm -f $(NAME_OTOOL)
 #@printf "[$(PROJECT_NM)] \"$(NAME_NM)\" removed.\n"
-
 
 re: fclean $(NAME)
 

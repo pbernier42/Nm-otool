@@ -1,0 +1,6 @@
+[???] Compiling main_otool.c to main_otool.o              [???] Compiling print_otool.c to print_otool.o              [???] Compiling open_otool.c to open_otool.o              [???] Compiling error_otool.c to error_otool.o              [???] Compiling read_otool.c to read_otool.o              [???] Compiling match_otool.c to match_otool.o              [???] Compiling fat_otool.c to fat_otool.o              [???] Compiling count.c to count.o              [???] Compiling print.c to print.o              [FT_OTOOL] Objs compilation done.                    
+[FT_OTOOL] ft_otool compiled.
+
+./break-nm-master/feed_the_nm/uuidgen:
+[2][7]
+OUEXH

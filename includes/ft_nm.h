@@ -1,40 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   ft_nm.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pbernier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/03 17:24:55 by pbernier          #+#    #+#             */
-/*   Updated: 2019/09/03 17:24:56 by pbernier         ###   ########.fr       */
+/*   Created: 2019/09/18 14:51:53 by pbernier          #+#    #+#             */
+/*   Updated: 2019/09/18 14:51:54 by pbernier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
+#ifndef FT_NM_H
+# define FT_NM_H
 
-# include <stdbool.h>
-# include <unistd.h>
-
-typedef unsigned long long		t_ull;
-
-# define RETURN_SUCESS	0
-# define RETURN_FAIL	-1
-
-# define CHAR_HEXA	((char[16]){"0123456789abcdef"})
+# include <utils.h>
+# include <ft_otool.h>
 
 /*
-**	count.c
+**	main_nm.c
 */
 
-size_t		len_text(char *text);
-short		size_number(t_ull number);
-
-/*
-**	print.c
-*/
-
-void		print_address(t_ull adress, short size, bool ox);
-void		print_number(t_ull number);
+int		read_symtab(t_match match);
 
 #endif

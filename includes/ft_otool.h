@@ -15,16 +15,16 @@
 
 # include <stdio.h>
 
-# include "match_o.h"
-# include "error_otool.h"
-# include "utils.h"
+# include <struct.h>
+# include <error.h>
+# include <utils.h>
 
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <sys/mman.h>
 
-
+# include <stdbool.h>
 
 /*
 **	main_otool.c

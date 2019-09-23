@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_otool.h                                      :+:      :+:    :+:   */
+/*   error.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pbernier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,11 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_OTOOL_H
-# define ERROR_OTOOL_H
+#ifndef ERROR_H
+# define ERROR_H
 
 # include <errno.h>
-# include <ft_otool.h>
 
 /*
 **	error_otool.c
@@ -46,7 +45,11 @@ struct						s_error
 {
 	char			*text;
 	e_errno			value;
+	char			__pad[4];
 };
+
+# define E__PAD					{0, 0, 0, 0}
+# define S_FILL(text, error)	((t_error){text, error, E__PAD})
 
 # define E_INIT		error_init
 # define E_NO_F		error_usage_no_file
@@ -77,21 +80,21 @@ struct						s_error
 # define T_MUNM		"Fail to munmap"
 # define T_EMPT		"Empty file"
 
-# define ERROR_USAGE_NO_FILE		((t_error){T_NO_F, E_NO_F})
-# define ERROR_USAGE_FLAG			((t_error){T_FLAG, E_FLAG})
-# define ERROR_USAGE_UNKNOWN_CHAR	((t_error){T_UN_C, E_UN_C})
-# define ERROR_FILE_PERMISSION		((t_error){T_PERM, E_PERM})
-# define ERROR_FILE_DONT_EXIST		((t_error){T_EXIS, E_EXIS})
-# define ERROR_FILE_IS_DIRECTORY	((t_error){T_DIRE, E_DIRE})
-# define ERROR_FILE_UNKNOWN			((t_error){T_UNKN, E_UNKN})
-# define ERROR_FILE_CLOSE			((t_error){T_CLOS, E_CLOS})
-# define ERROR_FILE_TYPE			((t_error){T_TYPE, E_TYPE})
-# define ERROR_FILE___TEXT			((t_error){T_TEXT, E_TEXT})
-# define ERROR_ALLOC_MMAP			((t_error){T_MMAP, E_MMAP})
-# define ERROR_ALLOC_MUNMAP			((t_error){T_MUNM, E_MUNM})
-# define ERROR_CORRUPT_EMPTY		((t_error){T_EMPT, E_EMPT})
+# define ERROR_USAGE_NO_FILE		S_FILL(T_NO_F, E_NO_F)
+# define ERROR_USAGE_FLAG			S_FILL(T_FLAG, E_FLAG)
+# define ERROR_USAGE_UNKNOWN_CHAR	S_FILL(T_UN_C, E_UN_C)
+# define ERROR_FILE_PERMISSION		S_FILL(T_PERM, E_PERM)
+# define ERROR_FILE_DONT_EXIST		S_FILL(T_EXIS, E_EXIS)
+# define ERROR_FILE_IS_DIRECTORY	S_FILL(T_DIRE, E_DIRE)
+# define ERROR_FILE_UNKNOWN			S_FILL(T_UNKN, E_UNKN)
+# define ERROR_FILE_CLOSE			S_FILL(T_CLOS, E_CLOS)
+# define ERROR_FILE_TYPE			S_FILL(T_TYPE, E_TYPE)
+# define ERROR_FILE___TEXT			S_FILL(T_TEXT, E_TEXT)
+# define ERROR_ALLOC_MMAP			S_FILL(T_MMAP, E_MMAP)
+# define ERROR_ALLOC_MUNMAP			S_FILL(T_MUNM, E_MUNM)
+# define ERROR_CORRUPT_EMPTY		S_FILL(T_EMPT, E_EMPT)
 
-# define ERROR_INIT(file)			error_otool(((t_error){file, E_INIT}))
+# define ERROR_INIT(file)			error_otool(S_FILL(file, E_INIT))
 
 int			error_usage(void);
 t_error		error_open(int fd);
