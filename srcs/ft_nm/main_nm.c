@@ -22,4 +22,4 @@ int		read_symtab(t_match match)
 	printf("[%u]\n",
 		((t_st_comm*)match.command)->cmd);
 	return (0);
-}
+} 

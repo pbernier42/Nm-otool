@@ -13,11 +13,6 @@
 #ifndef UTILS_H
 # define UTILS_H
 
-# include <struct.h>
-# include <error.h>
-# include <ft_nm.h>
-# include <ft_otool.h>
-
 # include <stdio.h>
 # include <unistd.h>
 # include <stdbool.h>

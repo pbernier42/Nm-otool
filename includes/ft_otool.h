@@ -93,7 +93,7 @@ bool		same_text(char text[16], char check[16]);
 **	f_fat_otool.c
 */
 
-int		read_fat(void *data, bool endian, t_eflags flag)
+int		read_fat(void *data, bool endian, t_eflags flag);
 
 /*
 **	match_otool.c

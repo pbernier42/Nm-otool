@@ -13,7 +13,6 @@
 #ifndef FT_NM_H
 # define FT_NM_H
 
-# include <utils.h>
 # include <ft_otool.h>
 
 /*
