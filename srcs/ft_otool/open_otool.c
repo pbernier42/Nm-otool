@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ft_otool.h>
+#include <utils.h>
 
 int		open_file(char *file, t_flags *flags)
 {
@@ -20,7 +20,6 @@ int		open_file(char *file, t_flags *flags)
 	int			ret;
 
 	ERROR_INIT(file);
-	// printf("[%d][%d]\n", flags->text_section, flags->load_command);
 	if ((fd = open(file, O_RDONLY)) < 0)
 		return (error_otool(error_open(fd)));
 	if (fstat(fd, &buf) != 0)
@@ -61,6 +60,7 @@ int		type_file(char *file, void *data, t_flags *flags)
 	{
 		write(1, file, len_text(file));
 		write(1, ":\n", 2);
+		printf("[%i][%i]\n", i % NUM_TYPE, i);
 		if (TAB_FT[i % NUM_TYPE](data, (i >= NUM_TYPE) ? true : false, flag))
 			return (RETURN_FAIL);
 	}

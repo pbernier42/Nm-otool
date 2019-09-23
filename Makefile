@@ -11,25 +11,26 @@ DIR_SRC			=	srcs/
 DIR_INC			=	includes/
 
 CC				=	gcc
-FLAGS			=	-Wall -Werror -Wextra
+FLAGS			=	-Wall -Werror -Wextra -Wpadded
 INCLUDES		=	-I $(DIR_INC)
 
 DIR_NM			=	ft_nm/
 DIR_OTOOL		=	ft_otool/
 DIR_UTILS		=	utils/
 
-SRC_INCLUDE		=	ft_otool.h \
-					error.h \
-					utils.h \
-					struct.h
+SRC_INCLUDE		=	error.h \
+					ft_nm.h \
+					ft_otool.h \
+					struct.h \
+					utils.h
 
 SRC_NM			=	main_nm.c
-SRC_OTOOL		=	main_otool.c \
+SRC_OTOOL		=	f_fat_otool.c \
+					f_match_otool.c \
+					main_otool.c \
 					print_otool.c \
 					open_otool.c \
 					read_otool.c \
-					f_match_otool.c
-
 SRC_UTILS		=	count.c \
 					print.c \
 					erroc.c
@@ -48,9 +49,6 @@ PATH_OBJ_ALL	=	$(PATH_OBJ_NM) $(PATH_OBJ_UTILS) $(PATH_OBJ_OTOOL)
 OBJS_NM			=	$(addprefix $(PATH_OBJ_NM),$(SRC_NM:.c=.o))
 OBJS_UTILS		=	$(addprefix $(PATH_OBJ_UTILS),$(SRC_UTILS:.c=.o))
 OBJS_OTOOL		=	$(addprefix $(PATH_OBJ_OTOOL),$(SRC_OTOOL:.c=.o))
-
-
-
 
 UND				= \033[4m
 RES				= \033[0m
@@ -71,7 +69,7 @@ endif
 $(NAME_NM): $(PATH_OBJ_NM) $(OBJS_NM)
 
 	@printf "[$(PROJECT_NM)] Objs compilation done.                    \n"
-	@$(CC) -o $(NAME_NM) $(FLAGS) $(OBJS_NM)
+	@$(CC) -o $(NAME_NM) $(INCLUDES) $(FLAGS) $(OBJS_NM)
 	@printf "[$(PROJECT_NM)] $(NAME_NM) compiled.\n"
 
 # $(NAME_OTOOL): $(PATH_OBJ_OTOOL) $(OBJS_OTOOL)

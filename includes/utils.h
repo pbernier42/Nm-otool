@@ -13,8 +13,20 @@
 #ifndef UTILS_H
 # define UTILS_H
 
+# include <struct.h>
+# include <error.h>
+# include <ft_nm.h>
+# include <ft_otool.h>
+
+# include <stdio.h>
+# include <unistd.h>
 # include <stdbool.h>
 # include <unistd.h>
+
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
+# include <sys/mman.h>
 
 typedef unsigned long long		t_ull;
 
