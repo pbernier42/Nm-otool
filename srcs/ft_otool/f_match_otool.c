@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   match_otool.c                                      :+:      :+:    :+:   */
+/*   f_match_otool.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pbernier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -63,4 +63,32 @@ int		read_match_section(t_match match)
 				SECTION_32->addr, SECTION_32->size, 8));
 	}
 	return (RETURN_FAIL);
+}
+
+int		read_text(void *data, t_ull offset, t_ull size)
+{
+	t_ull	count;
+
+	count = 0;
+	write(1, "Contents of (" TEXT_SEG "," TEXT_SECT ") section\n", 36);
+	while (count < size)
+	{
+		print_address(offset, 16, false);
+		write(1, "\t", 1);
+		print_data((data + count),
+			(size - count) <= 16 ? (size - count) : 16);
+		count += 16;
+		offset += 16;
+	}
+	return (RETURN_SUCESS);
+}
+
+bool		same_text(char text[16], char check[16])
+{
+	short	i;
+
+	i = 0;
+	while (text[i] == check[i] && check[i] && i < 16)
+		++i;
+	return ((i == 16 || !check[i]) ? true : false);
 }

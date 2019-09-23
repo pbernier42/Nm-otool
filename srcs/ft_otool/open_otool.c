@@ -61,8 +61,6 @@ int		type_file(char *file, void *data, t_flags *flags)
 	{
 		write(1, file, len_text(file));
 		write(1, ":\n", 2);
-		if (flag != e_text_section)
-			return (RETURN_FAIL);
 		if (TAB_FT[i % NUM_TYPE](data, (i >= NUM_TYPE) ? true : false, flag))
 			return (RETURN_FAIL);
 	}

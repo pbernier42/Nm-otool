@@ -27,8 +27,9 @@ SRC_NM			=	main_nm.c
 SRC_OTOOL		=	main_otool.c \
 					print_otool.c \
 					open_otool.c \
-					error_otool.c \
-					read_otool.c
+					read_otool.c \
+					f_match_otool.c
+
 SRC_UTILS		=	count.c \
 					print.c \
 					erroc.c

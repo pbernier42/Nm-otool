@@ -101,6 +101,4 @@ t_error		error_open(int fd);
 int			error_otool(t_error error);
 void		error_e_un_c(char unknow, char *argv);
 
-
-
 #endif
