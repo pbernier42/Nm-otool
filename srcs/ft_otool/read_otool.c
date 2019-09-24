@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <utils.h>
+#include <ft_otool.h>
 
 int		read_match_32(void *data, bool endian, t_eflags flag)
 {
@@ -65,12 +65,12 @@ int		read_text(void *data, t_ull offset, t_ull size_file, short size)
 	return (RETURN_SUCESS);
 }
 
+
 bool		same_text(char text[16], char check[16])
 {
 	short	i;
 
 	i = 0;
-	// printf("[%s]\n", text);
 	while (text[i] == check[i] && check[i] && i < 16)
 		++i;
 	return ((i == 16 || !check[i]) ? true : false);

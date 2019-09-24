@@ -44,29 +44,27 @@ OBJ_NM_			=	$(subst $(DIR_SRC),$(DIR_OBJ),$(SRC_NM_:.c=.o))
 OBJ_OTO			=	$(subst $(DIR_SRC),$(DIR_OBJ),$(SRC_OTO:.c=.o))
 OBJ_UTI			=	$(subst $(DIR_SRC),$(DIR_OBJ),$(SRC_UTI:.c=.o))
 
-DEP_NM_			=	$(DIR_OBJ_NM_)	$(OBJ_NM_)
-DEP_OTO			=	$(DIR_OBJ_OTO)	$(OBJ_OTO)
 DEP_UTI			=	$(DIR_OBJ_UTI)	$(OBJ_UTI)
+DEP_NM_			=	$(DIR_OBJ_NM_)	$(OBJ_NM_) 		$(DEP_UTI)
+DEP_OTO			=	$(DIR_OBJ_OTO)	$(OBJ_OTO) 		$(DEP_UTI)
 
-all: $(NAME_NM_)
+
+all: $(NAME_NM_) $(NAME_OTO)
 ifeq ($(NO_TO_BE),OFF)
 	@echo > /dev/null
 endif
 
-$(NAME_NM_): $(DEP_NM_) $(DEP_UTI)
-	printf "??"
+$(NAME_NM_): $(DEP_NM_)
 NAME 			=	$(NAME_NM_)
-OBJS			= 	$(OBJ_NM_)		$(OBJ_UTI)
-DIRS			=	$(DIR_OBJ_NM_)	$(DIR_OBJ_UTI)
 PROJECT			=	$(PROJECT_NM)
+OBJS			=	$(filter %.o, $(DEP_NM_))
 
-$(NAME_OTO): $(DEP_OTO) $(DEP_UTI)
+$(NAME_OTO): $(DEP_OTO)
 NAME 			=	$(NAME_OTO)
-OBJS			= 	$(OBJ_OTO)		$(OBJ_UTI)
-DIRS			=	$(DIR_OBJ_OTO)	$(DIR_OBJ_UTI)
 PROJECT			=	$(PROJECT_OTOOL)
+OBJS			=	$(filter %.o, $(DEP_OTO))
 
-$(NAME): $(DIRS) $(OBJS)
+$(NAME):
 	@printf "[$(PROJECT)] Objs compilation done.                    \n"
 	@$(CC) -o $(NAME) $(INCLUDES) $(FLAGS) $(OBJS)
 	@printf "[$(PROJECT)] $(NAME) compiled.\n"
@@ -78,27 +76,38 @@ $(DIR_OBJ)%.o: $(DIR_SRC)%.c $(SRC_INC) Makefile
 $(DIR_OBJ_ALL):
 	@mkdir -p $@
 
+clean_nm:
+	@if [ -d "$(DIR_OBJ_NM_)" ]; then 								\
+		printf "[$(PROJECT_NM)] Directoy";							\
+		if [ -d "$(DIR_OBJ_OTO)" ]; then							\
+			rm -rf $(DIR_OBJ_NM_);									\
+			printf " \'$(DIR_OBJ_NM_)\'";							\
+		else														\
+			rm -rf $(DIR_OBJ);										\
+			printf " \'$(DIR_OBJ)\'";								\
+		fi ;														\
+		printf " removed.\n";										\
+	fi
 
-# else
-# 	@printf "2.$(MAKECMDGOALS)\n"
-#endif
+clean_otool:
 
+clean:
+	@if [ -d "$(DIR_OBJ)" ]; then									\
+		rm -rf $(DIR_OBJ);											\
+		printf "[ALL] Obj removed.\n";								\
+	fi
 
+# if [[ -d "$(DIR_OBJ_NM_)" && ! -d "$(DIR_OBJ_OTO)" ]]; then	\
+# 	printf "[$(PROJECT_NM)]";								\
+# elif [[ -d "$(DIR_OBJ_OTO)" && ! -d "$(DIR_OBJ_NM_)" ]]; then		\
+# 	printf "[$(PROJECT_NM)]";								\
+# else														\
+# 	printf "[ALL]";											\
+# fi ;	\
 
-#
-# $(NAME_NM): $(PATH_OBJ_NM) $(OBJS_NM)
-# 	@printf "[$(PROJECT_NM)] Objs compilation done.                    \n"
-# 	@$(CC) -o $(NAME_NM) $(INCLUDES) $(FLAGS) $(OBJS_NM)
-# 	@printf "[$(PROJECT_NM)] $(NAME_NM) compiled.\n"
-#
-#
-#
-#
-#
-#
-#
-#
-#
+#@rm -rf $(DIR_OBJ)
+#@printf "[ALL] Obj removed.\n"
+
 # clean:
 # 	@rm -rf $(DIR_OBJ)
 # #@printf "[ALL] Obj removed.\n"
@@ -126,7 +135,7 @@ $(DIR_OBJ_ALL):
 #
 # re: fclean $(NAME)
 
-.PHONY: all help flag clean fclean re
+.PHONY: all clean_nm clean_otool clean
 
 
 # help:

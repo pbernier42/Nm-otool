@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <utils.h>
+#include <ft_otool.h>
+#include <ft_nm.h>
 
 //ATTENTO CORROMPU
 //endian
@@ -21,9 +22,9 @@ int		read_match_file(t_match match)
 	count_command = 0;
 	while (count_command++ < match.ncmds)
 	{
-		if (FLAG == e_load_command
+		if (FLAG == e_symbols_file
 			&& match.command->cmd == LC_SYMTAB
-			&& !read_symtab(match))
+			&& !read_match_symtab(match))
 			return (RETURN_SUCESS);
 		else if (FLAG == e_text_section
 			&& match.command->cmd == match.lc_segment
@@ -34,6 +35,36 @@ int		read_match_file(t_match match)
 	//ajouter pas touver LC_SYMTAB
 	return (error_otool(ERROR_FILE___TEXT));
 }
+
+# define SYMBOL			((t_st_comm*)match.command)
+# define NLIST			((t_st_nlis_64*)match.section)
+# define SYMBOL_NSYMS	SYMBOL->nsyms
+# define SYMBOL_CHAR	("UATDBC-SIW")
+# define STRING			((char*)(match.header + SYMBOL->symoff + SYMBOL->strsize))
+
+int		read_match_symtab(t_match match)
+{
+	uint32_t		count_symbol;
+
+	count_symbol = 0;
+	SECTION = match.header + SYMBOL->symoff;
+	while (count_symbol++ < SYMBOL_NSYMS-)
+	{
+		printf("fonction = [%s]\n", STRING + NLIST->n_strx);
+		printf("n_strx = [%u]\n", NLIST->n_strx);
+		printf("n_type = [%hhu]\n", NLIST->n_type);
+		printf("n_sect = [%hhu]\n", NLIST->n_sect);
+		printf("n_desc = [%hd]\n", NLIST->n_desc);
+		printf("n_value = [%llu]\n\n", NLIST->n_value);
+		SECTION += sizeof(t_st_nlis_64);
+	}
+	return (0);
+}
+
+// printf("CMD__ = [%u]\nCMD_S = [%u]\nOFF_N = [%u]-\n"
+// 	"NUMBE = [%u]\nOFF_S = [%u]-\nSTR_S = [%u]\n\n",
+// 	SYMBOL->cmd, SYMBOL->cmdsize, SYMBOL->symoff,
+// 	SYMBOL->nsyms, SYMBOL->stroff, SYMBOL->strsize);
 
 int		read_match_command(t_match match)
 {
@@ -63,32 +94,4 @@ int		read_match_section(t_match match)
 				SECTION_32->addr, SECTION_32->size, 8));
 	}
 	return (RETURN_FAIL);
-}
-
-int		read_text(void *data, t_ull offset, t_ull size)
-{
-	t_ull	count;
-
-	count = 0;
-	write(1, "Contents of (" TEXT_SEG "," TEXT_SECT ") section\n", 36);
-	while (count < size)
-	{
-		print_address(offset, 16, false);
-		write(1, "\t", 1);
-		print_data((data + count),
-			(size - count) <= 16 ? (size - count) : 16);
-		count += 16;
-		offset += 16;
-	}
-	return (RETURN_SUCESS);
-}
-
-bool		same_text(char text[16], char check[16])
-{
-	short	i;
-
-	i = 0;
-	while (text[i] == check[i] && check[i] && i < 16)
-		++i;
-	return ((i == 16 || !check[i]) ? true : false);
 }

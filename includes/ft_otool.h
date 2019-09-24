@@ -19,28 +19,22 @@
 # include <error.h>
 # include <utils.h>
 
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <fcntl.h>
-# include <sys/mman.h>
-
-# include <stdbool.h>
-
 /*
 **	main_otool.c
 */
 
 typedef struct s_flags		t_flags;
 
-# define NUMBER_FLAGS	2
-# define CHAR_FLAGS		"tl"
-# define RESET_FLAGS	((t_flags){0, 0})
+# define NUMBER_FLAGS	3
+# define CHAR_FLAGS		"tln"
+# define RESET_FLAGS	((t_flags){0, 0, 0})
 # define DONE_FLAGS		((bool*)&done)
 
 struct						s_flags
 {
 	bool			text_section;
 	bool			load_command;
+	bool			symbols_file;
 };
 
 
@@ -68,6 +62,7 @@ enum					e_flags
 {
 	e_text_section,
 	e_load_command,
+	e_symbols_file,
 	e_no_flags
 };
 
@@ -96,7 +91,7 @@ bool		same_text(char text[16], char check[16]);
 int		read_fat(void *data, bool endian, t_eflags flag);
 
 /*
-**	match_otool.c
+**	f_match_otool.c
 */
 
 typedef struct s_match		t_match;
@@ -120,12 +115,13 @@ struct						s_match
 };
 
 # define LC_SEGMENT 		0x1
+# define LC_SYMTAB			0x2
 # define LC_SEGMENT_64		0x19
 
-
+# define FLAG				(match.flag)
 # define COMMAND			((void *)match.command)
 # define SEGMENT_NSECTS		*((uint32_t*)(COMMAND + M_ADDR_NSECTS_SEGM))
-# define SECTION			match.section
+# define SECTION			(match.section)
 # define SECTION_SECTNAME	((char*)SECTION)
 # define SECTION_SEGNAME	((char*)(SECTION + 16))
 # define SECTION_32			((t_mh_sect_32*)SECTION)
@@ -133,6 +129,7 @@ struct						s_match
 
 
 int			read_match_file(t_match match);
+int			read_match_symtab(t_match match);
 int			read_match_command(t_match match);
 int			read_match_section(t_match match);
 

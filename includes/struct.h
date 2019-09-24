@@ -47,7 +47,7 @@ typedef struct s_fat_arch_32		t_ft_arch_32;
 typedef struct s_fat_arch_64		t_ft_arch_64;
 
 typedef struct s_symt_comm			t_st_comm;
-
+typedef struct s_symt_nlis_64		t_st_nlis_64;
 
 struct				s_mach_head_32	/* struct mach_header_64 for 64-bit */
 {
@@ -77,6 +77,37 @@ struct 				s_mach_comm/* load_command header */
 	uint32_t		cmd;        /* type of load command */
     uint32_t		cmdsize;    /* total size of command in bytes */
 };
+
+struct				s_symt_comm
+{
+    uint32_t        cmd;        /* LC_SYMTAB */
+    uint32_t        cmdsize;    /* sizeof(struct symtab_command) */
+    uint32_t        symoff;     /* symbol table offset (nlist array) */
+    uint32_t        nsyms;      /* number of symbol table entries */
+    uint32_t        stroff;     /* string table offset */
+    uint32_t        strsize;    /* string table size in bytes */
+};
+
+struct				s_symt_nlis_64
+{                   /* struct nlist_64 for 64-bit */
+    uint32_t		n_strx;     /* index into the string table (union n_un) */
+    uint8_t         n_type;     /* type flag, see below */
+    uint8_t         n_sect;     /* section number or NO_SECT */
+    int16_t         n_desc;     /* see <mach-o/stab.h> */
+	uint64_t        n_value;    /* value of this symbol (or stab offset) */
+};
+
+// struct				s_nlist_32
+// {                   /* struct nlist_64 for 64-bit */
+//     union           n_un:       /* union with char *n_name for 32-bit */
+//         uint32_t    n_strx;     /* index into the string table (union n_un) */
+//     uint8_t         n_type;     /* type flag, see below */
+//     uint8_t         n_sect;     /* section number or NO_SECT */
+//     int16_t         n_desc;     /* see <mach-o/stab.h> */
+// _32 uint32_t        n_value;    /* value of this symbol (or stab offset) */
+// _64 uint64_t        n_value;    /* value of this symbol (or stab offset) */
+// };
+
 
 struct				s_mach_segm_32
 {
@@ -165,14 +196,6 @@ struct 				s_fat_arch_64	/* struct fat_arch_64 for 64-bit*/
 	uint32_t        reserved;   /* reserved */ 							//exist que pour 64
 };
 
-struct				s_symt_comm
-{
-    uint32_t        cmd;        /* LC_SYMTAB */
-    uint32_t        cmdsize;    /* sizeof(struct symtab_command) */
-    uint32_t        symoff;     /* symbol table offset (nlist array) */
-    uint32_t        nsyms;      /* number of symbol table entries */
-    uint32_t        stroff;     /* string table offset */
-    uint32_t        strsize;    /* string table size in bytes */
-};
+
 
 #endif

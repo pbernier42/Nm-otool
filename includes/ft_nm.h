@@ -19,6 +19,5 @@
 **	main_nm.c
 */
 
-int		read_symtab(t_match match);
 
 #endif

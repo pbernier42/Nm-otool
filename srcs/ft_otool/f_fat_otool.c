@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <utils.h>
+#include <ft_otool.h>
 
 int		read_fat(void *data, bool endian, t_eflags flag)
 {

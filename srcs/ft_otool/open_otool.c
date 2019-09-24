@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <utils.h>
+#include <ft_otool.h>
 
 int		open_file(char *file, t_flags *flags)
 {
@@ -58,11 +58,15 @@ int		type_file(char *file, void *data, t_flags *flags)
 		return (error_otool(ERROR_FILE_TYPE));
 	while ((flag = what_flag((char *)flags)) != e_no_flags)
 	{
-		write(1, file, len_text(file));
-		write(1, ":\n", 2);
-		printf("[%i][%i]\n", i % NUM_TYPE, i);
-		if (TAB_FT[i % NUM_TYPE](data, (i >= NUM_TYPE) ? true : false, flag))
-			return (RETURN_FAIL);
+		//TMP /!!
+		if (flag != e_load_command)
+		{
+			write(1, file, len_text(file));
+			write(1, ":\n", 2);
+			//printf("[%i][%i]\n", i % NUM_TYPE, i);
+			if (TAB_FT[i % NUM_TYPE](data, (i >= NUM_TYPE) ? true : false, flag))
+				return (RETURN_FAIL);
+		}
 	}
 	return (RETURN_SUCESS);
 }
