@@ -81,7 +81,6 @@ int			read_match_32(void *data, bool endian, t_eflags flag);
 int			read_match_64(void *data, bool endian, t_eflags flag);
 
 int			read_text(void *data, t_ull address, t_ull size_file, short size);
-bool		same_text(char text[16], char check[16]);
 
 
 /*
@@ -99,6 +98,7 @@ typedef struct s_match		t_match;
 # define M_SIZEOF_SEGM		match.tab[0]
 # define M_SIZEOF_SECT		match.tab[1]
 # define M_ADDR_NSECTS_SEGM	match.tab[2]
+# define M_PROCESSOR		match.tab[3]
 
 struct						s_match
 {
@@ -108,10 +108,9 @@ struct						s_match
 	t_mh_comm	*command;
 	void		*section;
 	bool		endian;
-	char		__pad1[1];
-	short		tab[3];
+	bool		__pad1[3];
+	short		tab[4];
 	t_eflags	flag;
-	char		__pad2[4];
 };
 
 # define LC_SEGMENT 		0x1
@@ -127,9 +126,17 @@ struct						s_match
 # define SECTION_32			((t_mh_sect_32*)SECTION)
 # define SECTION_64			((t_mh_sect_64*)SECTION)
 
+# define SYMTAB				((t_st_comm*)match.command)
+# define SYMTAB_STRING		((char*)(match.header + SYMTAB->symoff + SYMTAB->strsize))
+# define NLIST				(match.section)
+# define SYMBOL_CHAR		("UATDBC-SIW")
+
 
 int			read_match_file(t_match match);
 int			read_match_symtab(t_match match);
+int			sort_match_nlist(char *string, void **tab_nlist, void *nlist,
+				uint32_t size);
+int			read_match_nlist(t_match match, void **tab_nlist);
 int			read_match_command(t_match match);
 int			read_match_section(t_match match);
 

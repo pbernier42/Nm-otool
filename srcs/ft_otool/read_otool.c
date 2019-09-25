@@ -25,6 +25,7 @@ int		read_match_32(void *data, bool endian, t_eflags flag)
 	M_SIZEOF_SEGM = sizeof(t_mh_segm_32);
 	M_SIZEOF_SECT = sizeof(t_mh_sect_32);
 	M_ADDR_NSECTS_SEGM = 48;
+	M_PROCESSOR = 32;
 	match.flag = flag;
 	return(read_match_file(match));
 }
@@ -42,6 +43,7 @@ int		read_match_64(void *data, bool endian, t_eflags flag)
 	M_SIZEOF_SEGM = sizeof(t_mh_segm_64);
 	M_SIZEOF_SECT = sizeof(t_mh_sect_64);
 	M_ADDR_NSECTS_SEGM = 64;
+	M_PROCESSOR = 64;
 	match.flag = flag;
 	return(read_match_file(match));
 }
@@ -63,15 +65,4 @@ int		read_text(void *data, t_ull offset, t_ull size_file, short size)
 		offset += 16;
 	}
 	return (RETURN_SUCESS);
-}
-
-
-bool		same_text(char text[16], char check[16])
-{
-	short	i;
-
-	i = 0;
-	while (text[i] == check[i] && check[i] && i < 16)
-		++i;
-	return ((i == 16 || !check[i]) ? true : false);
 }

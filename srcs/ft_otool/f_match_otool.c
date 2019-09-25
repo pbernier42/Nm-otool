@@ -36,36 +36,72 @@ int		read_match_file(t_match match)
 	return (error_otool(ERROR_FILE___TEXT));
 }
 
-# define SYMBOL			((t_st_comm*)match.command)
-# define NLIST			((t_st_nlis_64*)match.section)
-# define SYMBOL_NSYMS	SYMBOL->nsyms
-# define SYMBOL_CHAR	("UATDBC-SIW")
-# define STRING			((char*)(match.header + SYMBOL->symoff + SYMBOL->strsize))
-
 int		read_match_symtab(t_match match)
 {
-	uint32_t		count_symbol;
+	uint32_t		count_nlist;
+	void*			tab_nlist[SYMTAB->nsyms];
 
-	count_symbol = 0;
-	SECTION = match.header + SYMBOL->symoff;
-	while (count_symbol++ < SYMBOL_NSYMS-)
+	count_nlist = 0;
+	NLIST = match.header + SYMTAB->symoff;
+	while (count_nlist++ < SYMTAB->nsyms)
 	{
-		printf("fonction = [%s]\n", STRING + NLIST->n_strx);
-		printf("n_strx = [%u]\n", NLIST->n_strx);
-		printf("n_type = [%hhu]\n", NLIST->n_type);
-		printf("n_sect = [%hhu]\n", NLIST->n_sect);
-		printf("n_desc = [%hd]\n", NLIST->n_desc);
-		printf("n_value = [%llu]\n\n", NLIST->n_value);
-		SECTION += sizeof(t_st_nlis_64);
+		sort_match_nlist(SYMTAB_STRING, tab_nlist, NLIST, SYMTAB->nsyms);
+		NLIST += sizeof(t_st_nlis_64);
 	}
-	return (0);
+	if (read_match_nlist(match, tab_nlist))
+	 	return (RETURN_FAIL);
+	return (RETURN_SUCESS);
 }
 
-// printf("CMD__ = [%u]\nCMD_S = [%u]\nOFF_N = [%u]-\n"
-// 	"NUMBE = [%u]\nOFF_S = [%u]-\nSTR_S = [%u]\n\n",
-// 	SYMBOL->cmd, SYMBOL->cmdsize, SYMBOL->symoff,
-// 	SYMBOL->nsyms, SYMBOL->stroff, SYMBOL->strsize);
+# define LEN_TAB			len[0]
+# define LEN_STRING			len[1]
+# define LEN_SAVE			len[2]
 
+# define N_STRX(adress)		(((t_st_nlis_64*)adress)->n_strx)
+# define STRING(adress)		(&(string[N_STRX(adress)]))
+
+
+int	sort_match_nlist(char *string, void **tab_nlist, void *nlist, uint32_t size)
+{
+	static uint32_t	placed = 0;
+	uint32_t		len[3];
+
+	LEN_TAB = 0;
+	placed += (placed >= size) ? (-placed) : 1;
+	while (LEN_TAB < placed
+		&& tab_nlist[LEN_TAB]
+		&& sorted_text(STRING(tab_nlist[LEN_TAB]), STRING(nlist)))
+		LEN_TAB++;
+	if (tab_nlist[LEN_TAB])
+	{
+	 	LEN_SAVE = LEN_TAB;
+	 	LEN_TAB = placed;
+	 	while (LEN_TAB > LEN_SAVE)
+	 	{
+	 		tab_nlist[LEN_TAB] = tab_nlist[LEN_TAB - 1];
+			--LEN_TAB;
+		}
+	}
+	tab_nlist[LEN_TAB] = nlist;
+	return (RETURN_SUCESS);
+}
+
+int		read_match_nlist(t_match match, void **tab_nlist)
+{
+	uint32_t		len;
+
+	len = 0;
+	printf("\n");
+	while (len < SYMTAB->nsyms)
+	{
+		//printf()
+
+		//printf("[%s]\n", &SYMTAB_STRING[((t_st_nlis_64*)(tab_nlist[len]))->n_strx]);
+		len++;
+	}
+	(void)tab_nlist;
+	return (RETURN_SUCESS);
+}
 int		read_match_command(t_match match)
 {
 	uint32_t		count_section;
@@ -86,7 +122,7 @@ int		read_match_section(t_match match)
 	if (same_text(SECTION_SECTNAME, TEXT_SECT)
 		&& same_text(SECTION_SEGNAME, TEXT_SEG))
 	{
-		if (match.lc_segment == LC_SEGMENT_64)
+		if (M_PROCESSOR == 64)
 			return (read_text(match.header + SECTION_64->offset,
 				SECTION_64->addr, SECTION_64->size, 16));
 		else

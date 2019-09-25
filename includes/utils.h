@@ -44,4 +44,11 @@ short		size_number(t_ull number);
 void		print_address(t_ull adress, short size, bool ox);
 void		print_number(t_ull number);
 
+/*
+**	parse.c
+*/
+
+bool		same_text(char text[16], char check[16]);
+bool		sorted_text(char *text_one, char *text_two);
+
 #endif

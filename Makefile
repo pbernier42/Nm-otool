@@ -23,7 +23,8 @@ SRC_NM_			=	main_nm.c
 SRC_OTO			=	f_fat_otool.c	f_match_otool.c	main_otool.c	\
 					print_otool.c	open_otool.c	read_otool.c
 
-SRC_UTI			=	count.c			print.c			error.c
+SRC_UTI			=	count.c			print.c			error.c			\
+					parse.c
 
 CC				=	gcc
 FLAGS			=	-Wall -Werror -Wextra -Wpadded
