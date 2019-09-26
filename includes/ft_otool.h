@@ -74,31 +74,15 @@ t_eflags	what_flag(char *flags);
 **	read_otool.c
 */
 
+typedef struct s_match		t_match;
+
 # define TEXT_SECT			"__text"
 # define TEXT_SEG			"__TEXT"
-
-int			read_match_32(void *data, bool endian, t_eflags flag);
-int			read_match_64(void *data, bool endian, t_eflags flag);
-
-int			read_text(void *data, t_ull address, t_ull size_file, short size);
-
-
-/*
-**	f_fat_otool.c
-*/
-
-int		read_fat(void *data, bool endian, t_eflags flag);
-
-/*
-**	f_match_otool.c
-*/
-
-typedef struct s_match		t_match;
 
 # define M_SIZEOF_SEGM		match.tab[0]
 # define M_SIZEOF_SECT		match.tab[1]
 # define M_ADDR_NSECTS_SEGM	match.tab[2]
-# define M_PROCESSOR		match.tab[3]
+# define M_ADDR_SIZE		match.tab[3]
 
 struct						s_match
 {
@@ -112,6 +96,24 @@ struct						s_match
 	short		tab[4];
 	t_eflags	flag;
 };
+
+int			read_match_32(void *data, bool endian, t_eflags flag);
+int			read_match_64(void *data, bool endian, t_eflags flag);
+
+int			read_match_text(void *data, t_ull address, t_ull size_file, short size);
+int			read_match_nlist(t_match match, void **tab_nlist);
+int			read_match_ntype(void *nlist, char *type);
+
+
+/*
+**	f_fat_otool.c
+*/
+
+int		read_fat(void *data, bool endian, t_eflags flag);
+
+/*
+**	f_match_otool.c
+*/
 
 # define LC_SEGMENT 		0x1
 # define LC_SYMTAB			0x2
@@ -129,14 +131,21 @@ struct						s_match
 # define SYMTAB				((t_st_comm*)match.command)
 # define SYMTAB_STRING		((char*)(match.header + SYMTAB->symoff + SYMTAB->strsize))
 # define NLIST				(match.section)
-# define SYMBOL_CHAR		("UATDBC-SIW")
 
+# define LEN_TAB			len[0]
+# define LEN_STRING			len[1]
+# define LEN_SAVE			len[2]
+
+# define N_STRX(adress)		(((t_st_nlis_64*)adress)->n_strx)
+# define N_SECT(adress)		(((t_st_nlis_64*)adress)->n_sect)
+# define N_VALUE(adress)	(((t_st_nlis_64*)adress)->n_value)
+# define N_TYPE(adress)		(((t_st_nlis_64*)adress)->n_type)
+# define N_DESC(adress)		(((t_st_nlis_64*)adress)->n_desc)
+# define STRING(adress)		(&(SYMTAB_STRING[N_STRX(adress)]))
 
 int			read_match_file(t_match match);
 int			read_match_symtab(t_match match);
-int			sort_match_nlist(char *string, void **tab_nlist, void *nlist,
-				uint32_t size);
-int			read_match_nlist(t_match match, void **tab_nlist);
+int			sort_match_nlist(t_match match, void **tab_nlist);
 int			read_match_command(t_match match);
 int			read_match_section(t_match match);
 
@@ -150,7 +159,7 @@ int		read_fat(void *data, bool endian, t_eflags flag);
 **	print_otool.c
 */
 
-# define CHAR_SPACE		"            "
+# define CHAR_SPACE		"                "
 
 void 	print_header(void *data);
 void 	print_command(void *data);

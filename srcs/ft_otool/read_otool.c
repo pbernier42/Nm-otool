@@ -25,7 +25,7 @@ int		read_match_32(void *data, bool endian, t_eflags flag)
 	M_SIZEOF_SEGM = sizeof(t_mh_segm_32);
 	M_SIZEOF_SECT = sizeof(t_mh_sect_32);
 	M_ADDR_NSECTS_SEGM = 48;
-	M_PROCESSOR = 32;
+	M_ADDR_SIZE = 8;
 	match.flag = flag;
 	return(read_match_file(match));
 }
@@ -43,13 +43,13 @@ int		read_match_64(void *data, bool endian, t_eflags flag)
 	M_SIZEOF_SEGM = sizeof(t_mh_segm_64);
 	M_SIZEOF_SECT = sizeof(t_mh_sect_64);
 	M_ADDR_NSECTS_SEGM = 64;
-	M_PROCESSOR = 64;
+	M_ADDR_SIZE = 16;
 	match.flag = flag;
 	return(read_match_file(match));
 }
 
 
-int		read_text(void *data, t_ull offset, t_ull size_file, short size)
+int		read_match_text(void *data, t_ull offset, t_ull size_file, short size)
 {
 	t_ull	count;
 
@@ -64,5 +64,55 @@ int		read_text(void *data, t_ull offset, t_ull size_file, short size)
 		count += 16;
 		offset += 16;
 	}
+	return (RETURN_SUCESS);
+}
+
+int		read_match_nlist(t_match match, void **tab_nlist)
+{
+	uint32_t		len;
+	unsigned char	bit;
+	char			type;
+
+	len = 0;
+	while (len < SYMTAB->nsyms)
+	{
+		bit = (N_TYPE(tab_nlist[len]) & 0x0e);
+		if (bit != 0x0 && bit != 0x2)
+		 	print_address(N_VALUE(tab_nlist[len]), M_ADDR_SIZE, false);
+		else
+			write(1, CHAR_SPACE, M_ADDR_SIZE);
+		write(1, " ", 1);
+		type = '?';
+		if (read_match_ntype(tab_nlist[len], &type))
+			return(-1); //TMP
+		write(1, &type, 1);
+		write(1, " ", 1);
+		write(1, STRING(tab_nlist[len]), len_text(STRING(tab_nlist[len])));
+		write(1, "\n", 1);
+		len++;
+	}
+	return (RETURN_SUCESS);
+}
+
+int			read_match_ntype(void *nlist, char *type)
+{
+	short			len;
+	unsigned char	bit;
+
+	if (N_DESC(nlist))
+	{
+		*type = 'W';
+		return(RETURN_SUCESS);
+	}
+	if ((bit = (N_TYPE(nlist) & 0xe0)))
+		return (RETURN_SUCESS);
+	if (!(bit = (N_TYPE(nlist) & 0x0e)))
+		*type = N_VALUE(nlist) ? 'c' : 'u';
+	len = 0;
+	while ((bit) && len < 4)
+		if (bit == ((char[4]){0x2, 0xe, 0xc, 0xa})[len++])
+			*type = ((char[4]){'a', '.', 'u', 'i'})[len - 1];
+	if ((bit = (N_TYPE(nlist) & 0x01)) && *type >= 'a' && *type <= 'z')
+	 		*type -= ('a' - 'A');
 	return (RETURN_SUCESS);
 }

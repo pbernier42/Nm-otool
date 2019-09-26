@@ -45,7 +45,7 @@ int		read_match_symtab(t_match match)
 	NLIST = match.header + SYMTAB->symoff;
 	while (count_nlist++ < SYMTAB->nsyms)
 	{
-		sort_match_nlist(SYMTAB_STRING, tab_nlist, NLIST, SYMTAB->nsyms);
+		sort_match_nlist(match, tab_nlist);
 		NLIST += sizeof(t_st_nlis_64);
 	}
 	if (read_match_nlist(match, tab_nlist))
@@ -53,24 +53,16 @@ int		read_match_symtab(t_match match)
 	return (RETURN_SUCESS);
 }
 
-# define LEN_TAB			len[0]
-# define LEN_STRING			len[1]
-# define LEN_SAVE			len[2]
-
-# define N_STRX(adress)		(((t_st_nlis_64*)adress)->n_strx)
-# define STRING(adress)		(&(string[N_STRX(adress)]))
-
-
-int	sort_match_nlist(char *string, void **tab_nlist, void *nlist, uint32_t size)
+int		sort_match_nlist(t_match match, void **tab_nlist)
 {
 	static uint32_t	placed = 0;
 	uint32_t		len[3];
 
 	LEN_TAB = 0;
-	placed += (placed >= size) ? (-placed) : 1;
+	placed += (placed >= SYMTAB->nsyms) ? (-placed) : 1;
 	while (LEN_TAB < placed
 		&& tab_nlist[LEN_TAB]
-		&& sorted_text(STRING(tab_nlist[LEN_TAB]), STRING(nlist)))
+		&& sorted_text(STRING(tab_nlist[LEN_TAB]), STRING(NLIST)))
 		LEN_TAB++;
 	if (tab_nlist[LEN_TAB])
 	{
@@ -82,26 +74,10 @@ int	sort_match_nlist(char *string, void **tab_nlist, void *nlist, uint32_t size)
 			--LEN_TAB;
 		}
 	}
-	tab_nlist[LEN_TAB] = nlist;
+	tab_nlist[LEN_TAB] = NLIST;
 	return (RETURN_SUCESS);
 }
 
-int		read_match_nlist(t_match match, void **tab_nlist)
-{
-	uint32_t		len;
-
-	len = 0;
-	printf("\n");
-	while (len < SYMTAB->nsyms)
-	{
-		//printf()
-
-		//printf("[%s]\n", &SYMTAB_STRING[((t_st_nlis_64*)(tab_nlist[len]))->n_strx]);
-		len++;
-	}
-	(void)tab_nlist;
-	return (RETURN_SUCESS);
-}
 int		read_match_command(t_match match)
 {
 	uint32_t		count_section;
@@ -122,12 +98,12 @@ int		read_match_section(t_match match)
 	if (same_text(SECTION_SECTNAME, TEXT_SECT)
 		&& same_text(SECTION_SEGNAME, TEXT_SEG))
 	{
-		if (M_PROCESSOR == 64)
-			return (read_text(match.header + SECTION_64->offset,
-				SECTION_64->addr, SECTION_64->size, 16));
+		if (M_ADDR_SIZE == 16)
+			return (read_match_text(match.header + SECTION_64->offset,
+				SECTION_64->addr, SECTION_64->size, M_ADDR_SIZE));
 		else
-			return (read_text(match.header + SECTION_32->offset,
-				SECTION_32->addr, SECTION_32->size, 8));
+			return (read_match_text(match.header + SECTION_32->offset,
+				SECTION_32->addr, SECTION_32->size, M_ADDR_SIZE));
 	}
 	return (RETURN_FAIL);
 }
