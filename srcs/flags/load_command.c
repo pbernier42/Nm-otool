@@ -1,16 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_otool.c                                      :+:      :+:    :+:   */
+/*   load_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pbernier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/30 14:47:05 by pbernier          #+#    #+#             */
-/*   Updated: 2019/08/30 14:47:06 by pbernier         ###   ########.fr       */
+/*   Created: 2019/09/30 19:05:57 by pbernier          #+#    #+#             */
+/*   Updated: 2019/09/30 19:05:58 by pbernier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <ft_otool.h>
+void 		print_header(void *data)
+{
+	t_mh_head_64	*mh_header;
+
+	mh_header = data;
+	write(1, "Mach header\n      magic cputype cpusubtype  caps    filetype "
+		"ncmds sizeofcmds      flags\n ", 90);
+	print_address(mh_header->magic, 8, true);
+	write(1, CHAR_SPACE, 9 - size_number(mh_header->cputype));
+	print_number(mh_header->cputype);
+	write(1, CHAR_SPACE, 11 - size_number(mh_header->cpusubtype));
+	print_number(mh_header->cpusubtype);
+	write(1, CHAR_SPACE, 2);
+	print_address(0, 2, true);
+	write(1, CHAR_SPACE, 12 - size_number(mh_header->filetype));
+	print_number(mh_header->filetype);
+	write(1, CHAR_SPACE, 6 - size_number(mh_header->ncmds));
+	print_number(mh_header->ncmds);
+	write(1, CHAR_SPACE, 11 - size_number(mh_header->sizeofcmds));
+	print_number(mh_header->sizeofcmds);
+	write(1, CHAR_SPACE, 1);
+	print_address(mh_header->flags, 8, true);
+	write(1, "\n", 1);
+}
 
 void		print_section(void *data)
 {
@@ -42,31 +65,6 @@ void		print_section(void *data)
 	write(1, "\n", 1);
 }
 
-void 		print_header(void *data)
-{
-	t_mh_head_64	*mh_header;
-
-	mh_header = data;
-	write(1, "Mach header\n      magic cputype cpusubtype  caps    filetype "
-		"ncmds sizeofcmds      flags\n ", 90);
-	print_address(mh_header->magic, 8, true);
-	write(1, CHAR_SPACE, 9 - size_number(mh_header->cputype));
-	print_number(mh_header->cputype);
-	write(1, CHAR_SPACE, 11 - size_number(mh_header->cpusubtype));
-	print_number(mh_header->cpusubtype);
-	write(1, CHAR_SPACE, 2);
-	print_address(0, 2, true);
-	write(1, CHAR_SPACE, 12 - size_number(mh_header->filetype));
-	print_number(mh_header->filetype);
-	write(1, CHAR_SPACE, 6 - size_number(mh_header->ncmds));
-	print_number(mh_header->ncmds);
-	write(1, CHAR_SPACE, 11 - size_number(mh_header->sizeofcmds));
-	print_number(mh_header->sizeofcmds);
-	write(1, CHAR_SPACE, 1);
-	print_address(mh_header->flags, 8, true);
-	write(1, "\n", 1);
-}
-
 void 		print_command(void *data)
 {
 	static short	count = -1;
@@ -85,21 +83,4 @@ void 		print_command(void *data)
 	write(1, "\n", 1);
 	// A FINIR
 	write(1, "\n", 1);
-}
-
-void	print_data(unsigned char data[16], short size)
-{
- 	char			ret[(size * 3) + 1];
- 	short			len;
-
- 	len	= 0;
- 	while (len < size)
- 	{
-		ret[(len * 3)] = CHAR_HEXA[data[len] / 16];
- 		ret[(len * 3) + 1] = CHAR_HEXA[data[len] % 16];
- 		ret[(len * 3) + 2] = ' ';
- 		len++;
-	}
-	ret[(size * 3)] = '\n';
- 	write(1, ret, (size * 3) + 1);
 }

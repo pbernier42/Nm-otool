@@ -1,84 +1,51 @@
-PROJECT_NM		=	FT_NM
-PROJECT_OTOOL	=	FT_OTOOL
+PROJ_NM_		=	FT_NM
+PROJ_OTO		=	FT_OTOOL
 
 NAME_NM_		=	ft_nm
 NAME_OTO		=	ft_otool
+NAMES			=	$(NAME_NM_)	$(NAME_OTO)
 
 NO_TO_BE		=	ON
 
-DIR_OBJ			=	objs/
-DIR_SRC			=	srcs/
-
-DIR_INC			=	includes/
-DIR_NM_			=	ft_nm/
-DIR_OTO			=	ft_otool/
-DIR_UTI			=	utils/
-
-#wicard
-SRC_INC			=	error.h			ft_nm.h			ft_otool.h		\
-					struct.h 		utils.h
-
-SRC_NM_			=	main_nm.c
-
-SRC_OTO			=	f_fat_otool.c	f_match_otool.c	main_otool.c	\
-					print_otool.c	open_otool.c	read_otool.c
-
-SRC_UTI			=	count.c			print.c			error.c			\
-					parse.c
+DIR_OBJ_		=	objs
+DIR_SRC_		=	srcs
+DIR_INC_		=	includes
 
 CC				=	gcc
-FLAGS			=	-Wall -Werror -Wextra -Wpadded
-INCLUDES		=	-I $(DIR_INC)
+FLAGS___		=	-Wall -Werror -Wextra -Wpadded
+INCLUDES		=	-I $(DIR_INC_)
 
-SRC_INC			:=	$(addprefix $(DIR_INC),$(SRC_INC))
-SRC_OTO			:=	$(addprefix $(DIR_SRC)$(DIR_OTO), $(SRC_OTO))
-SRC_NM_			:=	$(addprefix $(DIR_SRC)$(DIR_NM_), $(SRC_NM_))	\
-					$(SRC_OTO)
-SRC_UTI			:=	$(addprefix $(DIR_SRC)$(DIR_UTI), $(SRC_UTI))
-
-DIR_OBJ_NM_		=	$(DIR_OBJ)$(DIR_NM_)
-DIR_OBJ_OTO		=	$(DIR_OBJ)$(DIR_OTO)
-DIR_OBJ_UTI		=	$(DIR_OBJ)$(DIR_UTI)
-
-DIR_OBJ_ALL		=	$(DIR_OBJ_NM_)	$(DIR_OBJ_UTI)	$(DIR_OBJ_OTO)
-
-OBJ_NM_			=	$(subst $(DIR_SRC),$(DIR_OBJ),$(SRC_NM_:.c=.o))
-OBJ_OTO			=	$(subst $(DIR_SRC),$(DIR_OBJ),$(SRC_OTO:.c=.o))
-OBJ_UTI			=	$(subst $(DIR_SRC),$(DIR_OBJ),$(SRC_UTI:.c=.o))
-
-DEP_UTI			=	$(DIR_OBJ_UTI)	$(OBJ_UTI)
-DEP_NM_			=	$(DIR_OBJ_NM_)	$(OBJ_NM_) 		$(DEP_UTI)
-DEP_OTO			=	$(DIR_OBJ_OTO)	$(OBJ_OTO) 		$(DEP_UTI)
-
+SRC_INC_		=	$(shell find $(DIR_INC_) -name '*.h')
+SRC_____		=	$(shell find $(DIR_SRC_) -name '*.c')
+SRC_REMO		=
+DIRS_SRC		=	$(shell find $(DIR_SRC_) -type d)
+DIRS_OBJ		=	$(subst $(DIR_SRC_),$(DIR_OBJ_),$(DIRS_SRC))
+OBJ_____		=	$(subst $(DIR_SRC_),$(DIR_OBJ_),$(SRC_____:.c=.o))
 
 all: $(NAME_NM_) $(NAME_OTO)
 ifeq ($(NO_TO_BE),OFF)
 	@echo > /dev/null
 endif
 
-$(NAME_NM_): NAME 		= $(NAME_NM_)
-$(NAME_NM_): PROJECT 	= $(PROJECT_NM)
-$(NAME_NM_): OBJS 		= $(filter %.o, $(DEP_NM_))
-$(NAME_NM_): DEP 		= $(DEP_NM_)
+$(NAME_NM_): NAME = $(NAME_NM_)
+$(NAME_NM_): PROJ = $(PROJ_NM_)
 
+$(NAME_OTO): NAME = $(NAME_OTO)
+$(NAME_OTO): PROJ = $(PROJ_OTO)
 
-$(NAME_OTO): $(DEP_OTO)
-NAME 			=	$(NAME_OTO)
-PROJECT			=	$(PROJECT_OTOOL)
-OBJS			=	$(filter %.o, $(DEP_OTO))
+$(NAMES): $(OBJ_____)
+#@printf "[$(PROJ)] Objs compilation done.                    \n"
+	@printf "[$(DIRS_SRC)]\n"
+# @$(CC) -o $(NAME) $(INCLUDES) $(FLAGS___) $(OBJ_____)
+# @printf "[$(PROJ)] $(NAME) compiled.\n"
 
-$(NAME_NM_): $(DEP)
-	@printf "[$(PROJECT)] Objs compilation done.                    \n"
-	@$(CC) -o $(NAME) $(INCLUDES) $(FLAGS) $(OBJS)
-	@printf "[$(PROJECT)] $(NAME) compiled.\n"
+$(DIRS_OBJ)%.o: %.c Makefile
+	@printf ".[$@]\n"
+# 	@printf "[$(PROJ)] Compiling $(notdir $<) to $(notdir $@)            \n"
+# 	@$(CC) $(FLAGS___) $(INCLUDES) -o $@ -c $<
 
-$(DIR_OBJ)%.o: $(DIR_SRC)%.c $(SRC_INC) Makefile
-	@printf "    {$(NAME)}\n"
-	@printf "[$(PROJECT)] Compiling $(notdir $<) to $(notdir $@)            \n"
-	@$(CC) $(FLAGS) $(INCLUDES) -o $@ -c $<
-
-$(DIR_OBJ_ALL):
-	@mkdir -p $@
+# $(DIRS_OBJ):
+#mkdir -p $@
 
 clean_nm:
 	@if [ -d "$(DIR_OBJ_NM_)" ]; then 								\
