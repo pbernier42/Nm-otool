@@ -59,7 +59,7 @@ int		sort_match_nlist(t_match match, void **tab_nlist)
 	uint32_t		len[3];
 
 	LEN_TAB = 0;
-	placed += (placed >= SYMTAB->nsyms) ? (-placed) : 1;
+	placed += (placed >= SYMTAB->nsyms) ? (-placed) : 1;	
 	while (LEN_TAB < placed
 		&& tab_nlist[LEN_TAB]
 		&& sorted_text(STRING(tab_nlist[LEN_TAB]), STRING(NLIST)))

@@ -17,17 +17,18 @@ int		main(int argc, char **argv)
 	t_flags	flags;
 	int		files;
 
-	if ((files = check_usage(argc, argv, &flags)) == RETURN_FAIL)
+	if ((files = check_usage(argc, argv, &flags, ft_otool)) == RETURN_FAIL)
 		return (RETURN_FAIL);
 	while (argv[files] && !open_file(argv[files], &flags))
 		++files;
 	return (RETURN_SUCESS);
 }
 
-int		check_usage(int argc, char **argv, t_flags *flags)
+int		check_usage(int argc, char **argv, t_flags *flags, e_fonction fonction)
 {
 	int		len;
 
+	(void)fonction;
 	ERROR_INIT(NULL);
 	if (argc < 2)
 		return (error_usage());

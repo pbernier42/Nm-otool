@@ -20,7 +20,14 @@
 */
 
 typedef struct s_error		t_error;
+typedef enum e_fonction		e_fonction;
 typedef enum e_errno		e_errno;
+
+enum						e_fonction
+{
+	ft_otool,
+	ft_nm
+};
 
 enum						e_errno
 {

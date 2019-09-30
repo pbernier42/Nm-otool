@@ -31,8 +31,9 @@ FLAGS			=	-Wall -Werror -Wextra -Wpadded
 INCLUDES		=	-I $(DIR_INC)
 
 SRC_INC			:=	$(addprefix $(DIR_INC),$(SRC_INC))
-SRC_NM_			:=	$(addprefix $(DIR_SRC)$(DIR_NM_), $(SRC_NM_))
 SRC_OTO			:=	$(addprefix $(DIR_SRC)$(DIR_OTO), $(SRC_OTO))
+SRC_NM_			:=	$(addprefix $(DIR_SRC)$(DIR_NM_), $(SRC_NM_))	\
+					$(SRC_OTO)
 SRC_UTI			:=	$(addprefix $(DIR_SRC)$(DIR_UTI), $(SRC_UTI))
 
 DIR_OBJ_NM_		=	$(DIR_OBJ)$(DIR_NM_)
@@ -55,22 +56,24 @@ ifeq ($(NO_TO_BE),OFF)
 	@echo > /dev/null
 endif
 
-$(NAME_NM_): $(DEP_NM_)
-NAME 			=	$(NAME_NM_)
-PROJECT			=	$(PROJECT_NM)
-OBJS			=	$(filter %.o, $(DEP_NM_))
+$(NAME_NM_): NAME 		= $(NAME_NM_)
+$(NAME_NM_): PROJECT 	= $(PROJECT_NM)
+$(NAME_NM_): OBJS 		= $(filter %.o, $(DEP_NM_))
+$(NAME_NM_): DEP 		= $(DEP_NM_)
+
 
 $(NAME_OTO): $(DEP_OTO)
 NAME 			=	$(NAME_OTO)
 PROJECT			=	$(PROJECT_OTOOL)
 OBJS			=	$(filter %.o, $(DEP_OTO))
 
-$(NAME):
+$(NAME_NM_): $(DEP)
 	@printf "[$(PROJECT)] Objs compilation done.                    \n"
 	@$(CC) -o $(NAME) $(INCLUDES) $(FLAGS) $(OBJS)
 	@printf "[$(PROJECT)] $(NAME) compiled.\n"
 
 $(DIR_OBJ)%.o: $(DIR_SRC)%.c $(SRC_INC) Makefile
+	@printf "    {$(NAME)}\n"
 	@printf "[$(PROJECT)] Compiling $(notdir $<) to $(notdir $@)            \n"
 	@$(CC) $(FLAGS) $(INCLUDES) -o $@ -c $<
 

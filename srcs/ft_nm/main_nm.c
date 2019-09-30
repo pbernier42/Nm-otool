@@ -12,7 +12,13 @@
 
 # include <ft_nm.h>
 
-int		main(void)
+int		main(int argc, char **argv)
 {
-	return (0);
+	t_flags	flags;
+	int		files;
+
+	if ((files = check_usage(argc, argv, &flags, ft_nm)) == RETURN_FAIL)
+		return (RETURN_FAIL);
+
+	return (RETURN_SUCESS);
 }

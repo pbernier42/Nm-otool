@@ -83,8 +83,8 @@ int		read_match_nlist(t_match match, void **tab_nlist)
 			write(1, CHAR_SPACE, M_ADDR_SIZE);
 		write(1, " ", 1);
 		type = '?';
-		if (read_match_ntype(tab_nlist[len], &type))
-			return(-1); //TMP
+		if (read_match_ntype(match, tab_nlist[len], &type))
+			return (-1); //TMP
 		write(1, &type, 1);
 		write(1, " ", 1);
 		write(1, STRING(tab_nlist[len]), len_text(STRING(tab_nlist[len])));
@@ -94,7 +94,7 @@ int		read_match_nlist(t_match match, void **tab_nlist)
 	return (RETURN_SUCESS);
 }
 
-int			read_match_ntype(void *nlist, char *type)
+int			read_match_ntype(t_match match, void *nlist, char *type)
 {
 	short			len;
 	unsigned char	bit;
@@ -111,8 +111,21 @@ int			read_match_ntype(void *nlist, char *type)
 	len = 0;
 	while ((bit) && len < 4)
 		if (bit == ((char[4]){0x2, 0xe, 0xc, 0xa})[len++])
-			*type = ((char[4]){'a', '.', 'u', 'i'})[len - 1];
+			*type = ((char[4]){'a', what_sectname(SECTNAME(nlist)), 'u', 'i'})[len - 1];
 	if ((bit = (N_TYPE(nlist) & 0x01)) && *type >= 'a' && *type <= 'z')
 	 		*type -= ('a' - 'A');
 	return (RETURN_SUCESS);
+}
+
+char		what_sectname(char text[16])
+{
+	short		len;
+
+	len = 0;
+	while (len < 3)
+		if (same_text(
+			(((char*[3]){TEXT_SECT, "__data", "__bss"})[len++]), text))
+			return (((char[3]){'t', 'd', 'b'})[len - 1]);
+	//error sectname
+	return ('s');
 }

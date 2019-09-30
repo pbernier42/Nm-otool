@@ -42,7 +42,7 @@ struct						s_flags
 # define LEN_ARGV		len[1]
 # define SIZE_ARGV		len[2]
 
-int			check_usage(int argc, char **argv, t_flags *flags);
+int			check_usage(int argc, char **argv, t_flags *flags, e_fonction fonction);
 int			check_flags(char *argv, char *flags);
 
 /*
@@ -102,8 +102,7 @@ int			read_match_64(void *data, bool endian, t_eflags flag);
 
 int			read_match_text(void *data, t_ull address, t_ull size_file, short size);
 int			read_match_nlist(t_match match, void **tab_nlist);
-int			read_match_ntype(void *nlist, char *type);
-
+int			read_match_ntype(t_match match, void *nlist, char *type);
 
 /*
 **	f_fat_otool.c
@@ -129,7 +128,7 @@ int		read_fat(void *data, bool endian, t_eflags flag);
 # define SECTION_64			((t_mh_sect_64*)SECTION)
 
 # define SYMTAB				((t_st_comm*)match.command)
-# define SYMTAB_STRING		((char*)(match.header + SYMTAB->symoff + SYMTAB->strsize))
+
 # define NLIST				(match.section)
 
 # define LEN_TAB			len[0]
@@ -141,11 +140,16 @@ int		read_fat(void *data, bool endian, t_eflags flag);
 # define N_VALUE(adress)	(((t_st_nlis_64*)adress)->n_value)
 # define N_TYPE(adress)		(((t_st_nlis_64*)adress)->n_type)
 # define N_DESC(adress)		(((t_st_nlis_64*)adress)->n_desc)
+
+//a revoir
+# define SECTNAME(adress)	(&(((char*)(match.header + 103))[N_SECT(adress)]))
+# define SYMTAB_STRING		((char*)(match.header + SYMTAB->symoff + SYMTAB->strsize))
 # define STRING(adress)		(&(SYMTAB_STRING[N_STRX(adress)]))
 
 int			read_match_file(t_match match);
 int			read_match_symtab(t_match match);
 int			sort_match_nlist(t_match match, void **tab_nlist);
+char		what_sectname(char text[16]);
 int			read_match_command(t_match match);
 int			read_match_section(t_match match);
 

@@ -14,6 +14,8 @@
 # define FT_NM_H
 
 # include <ft_otool.h>
+# include <utils.h>
+# include <error.h>
 
 /*
 **	main_nm.c
