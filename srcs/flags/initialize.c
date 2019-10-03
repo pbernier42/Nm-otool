@@ -10,27 +10,40 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int		check_usage(int argc, char **argv, t_flags *flags, e_fonction fonction)
-{
-	int		len;
+#include <nm_otool.h>
 
-	(void)fonction;
-	ERROR_INIT(NULL);
-	if (argc < 2)
-		return (error_usage());
+int			check_usage(int argc, char **argv, t_flags *flags)
+{
+	int			len;
+	e_fonction	fonction;
+
+	if (!(fonction = check_fonction(argv[0])) || argc < 2)
+		return (error_usage(fonction));
+	ERROR_INIT_FONCTION((fonction == ft_nm) ? "ft_nm" : "ft_otool");
 	len = 1;
-	while (len < argc && argv[len][0] == '-')
+	while (fonction == ft_otool && len < argc && argv[len][0] == '-')
 	{
 		if (check_flags(argv[len], (char *)flags))
-			return (error_usage());
+			return (error_usage(fonction));
 		//combinaison de flag
 		++len;
 	}
 	if (!argv[len])
-		return (error_otool(ERROR_USAGE_NO_FILE));
-	if (len == 1)
+		return (error(ERROR_USAGE_NO_FILE));
+	if (fonction == ft_otool && len == 1)
 		flags->text_section = true;
+	else if (fonction == ft_nm)
+		flags->symbols_file = true;
 	return (len);
+}
+
+e_fonction	check_fonction(char *name)
+{
+	if (name && same_text(name, "./ft_otool"))
+		return (ft_otool);
+	else if (name && same_text(name, "./ft_nm"))
+		return (ft_nm);
+	return (ft_null);
 }
 
 int		check_flags(char *argv, char *flags)
@@ -38,7 +51,7 @@ int		check_flags(char *argv, char *flags)
 	size_t	len[3];
 
 	if ((SIZE_ARGV = len_text(argv)) == 1)
-		return (error_otool(ERROR_USAGE_FLAG));
+		return (error(ERROR_USAGE_FLAG));
 	LEN_ARGV = 1;
 	while (LEN_ARGV < SIZE_ARGV)
 	{
@@ -48,7 +61,7 @@ int		check_flags(char *argv, char *flags)
 			++LEN_FLAGS;
 		if (LEN_FLAGS == NUMBER_FLAGS)
 		{
-			error_otool(ERROR_USAGE_UNKNOWN_CHAR);
+			error(ERROR_USAGE_UNKNOWN_CHAR);
 			error_e_un_c(argv[LEN_ARGV], argv);
 		 	return (RETURN_FAIL);
 		}

@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <nm_otool.h>
+
 int		read_match_32(void *data, bool endian, t_eflags flag)
 {
 	t_match			match;
@@ -66,5 +68,5 @@ int		read_match_file(t_match match)
 		match.command = COMMAND + match.command->cmdsize;
 	}
 	//ajouter pas touver LC_SYMTAB
-	return (error_otool(ERROR_FILE___TEXT));
+	return (error(ERROR_FILE___TEXT));
 }

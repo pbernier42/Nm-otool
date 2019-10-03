@@ -25,13 +25,16 @@ typedef enum e_errno		e_errno;
 
 enum						e_fonction
 {
+	ft_null,
 	ft_otool,
 	ft_nm
 };
 
 enum						e_errno
 {
-	error_init,
+	error_init_fonction,
+	error_init_file,
+	error_usage_fonction,
 	error_usage_wrong,
 	error_usage_no_file,
 	error_usage_flag,
@@ -58,7 +61,8 @@ struct						s_error
 # define E__PAD					{0, 0, 0, 0}
 # define S_FILL(text, error)	((t_error){text, error, E__PAD})
 
-# define E_INIT		error_init
+# define E_I_FT		error_init_fonction
+# define E_I_FI		error_init_file
 # define E_NO_F		error_usage_no_file
 # define E_FLAG		error_usage_flag
 # define E_UN_C		error_usage_unknow_char
@@ -101,11 +105,13 @@ struct						s_error
 # define ERROR_ALLOC_MUNMAP			S_FILL(T_MUNM, E_MUNM)
 # define ERROR_CORRUPT_EMPTY		S_FILL(T_EMPT, E_EMPT)
 
-# define ERROR_INIT(file)			error_otool(S_FILL(file, E_INIT))
+# define ERROR_INIT_FONCTION(text)	error(S_FILL(text, E_I_FT))
+# define ERROR_INIT_FILE(file)		error(S_FILL(file, E_I_FI))
 
-int			error_usage(void);
+int			error_usage(e_fonction fonction);
 t_error		error_open(int fd);
-int			error_otool(t_error error);
+int			error(t_error error);
+int			error_init(char **fonction, char **file, t_error error);
 void		error_e_un_c(char unknow, char *argv);
 
 #endif

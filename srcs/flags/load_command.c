@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <nm_otool.h>
+
 void 		print_header(void *data)
 {
 	t_mh_head_64	*mh_header;

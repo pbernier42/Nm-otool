@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <nm_otool.h>
+
 int		read_match_command(t_match match)
 {
 	uint32_t		count_section;

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_otool.h                                         :+:      :+:    :+:   */
+/*   nm_otool.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pbernier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,10 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_OTOOL_H
-# define FT_OTOOL_H
-
-# include <stdio.h>
+#ifndef NM_OTOOL_H
+# define NM_OTOOL_H
 
 # include <struct.h>
 # include <error.h>
@@ -23,8 +21,8 @@
 **	main_otool.c
 */
 
-typedef struct s_flags		t_flags;
 
+typedef struct s_flags		t_flags;
 # define NUMBER_FLAGS	3
 # define CHAR_FLAGS		"tln"
 # define RESET_FLAGS	((t_flags){0, 0, 0})
@@ -42,7 +40,8 @@ struct						s_flags
 # define LEN_ARGV		len[1]
 # define SIZE_ARGV		len[2]
 
-int			check_usage(int argc, char **argv, t_flags *flags, e_fonction fonction);
+int			check_usage(int argc, char **argv, t_flags *flags);
+e_fonction	check_fonction(char *name);
 int			check_flags(char *argv, char *flags);
 
 /*

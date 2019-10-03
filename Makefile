@@ -3,7 +3,7 @@ PROJ_OTO		=	FT_OTOOL
 
 NAME_NM_		=	ft_nm
 NAME_OTO		=	ft_otool
-NAMES			=	$(NAME_NM_)	$(NAME_OTO)
+NAMES___		=	$(NAME_NM_)	$(NAME_OTO)
 
 NO_TO_BE		=	ON
 
@@ -22,6 +22,11 @@ DIRS_SRC		=	$(shell find $(DIR_SRC_) -type d)
 DIRS_OBJ		=	$(subst $(DIR_SRC_),$(DIR_OBJ_),$(DIRS_SRC))
 OBJ_____		=	$(subst $(DIR_SRC_),$(DIR_OBJ_),$(SRC_____:.c=.o))
 
+# LEN_SRC_		=	$(subs $(sort $(foreach src,$(notdir $(SRC_____)),$(strip $(shell echo -n "$(src)" | wc -c))))
+# #
+# LEN_MAX			=	$(shell echo -e $(subst $(sp),'\n',$2) | sort $1 --key=1,1 -)
+
+
 all: $(NAME_NM_) $(NAME_OTO)
 ifeq ($(NO_TO_BE),OFF)
 	@echo > /dev/null
@@ -33,40 +38,20 @@ $(NAME_NM_): PROJ = $(PROJ_NM_)
 $(NAME_OTO): NAME = $(NAME_OTO)
 $(NAME_OTO): PROJ = $(PROJ_OTO)
 
-$(NAMES): $(OBJ_____)
-#@printf "[$(PROJ)] Objs compilation done.                    \n"
-	@printf "[$(DIRS_SRC)]\n"
-# @$(CC) -o $(NAME) $(INCLUDES) $(FLAGS___) $(OBJ_____)
-# @printf "[$(PROJ)] $(NAME) compiled.\n"
+$(NAMES___): $(DIRS_OBJ) $(OBJ_____)
+	@$(CC) -o $(NAME) $(INCLUDES) $(FLAGS___) $(OBJ_____)
+	@printf "[$(PROJ)] $(NAME) compiled.\n"
 
-$(DIRS_OBJ)%.o: %.c Makefile
-	@printf ".[$@]\n"
-# 	@printf "[$(PROJ)] Compiling $(notdir $<) to $(notdir $@)            \n"
-# 	@$(CC) $(FLAGS___) $(INCLUDES) -o $@ -c $<
+$(DIR_OBJ_)/%.o: $(DIR_SRC_)/%.c $(SRC_INC_) Makefile
+	@printf "[$(PROJ)] Compiling $(notdir $<) to $(notdir $@)            \n"
+	@$(CC) $(FLAGS___) $(INCLUDES) -o $@ -c $<
 
-# $(DIRS_OBJ):
-#mkdir -p $@
+$(DIRS_OBJ):
+	@mkdir -p $@
 
-clean_nm:
-	@if [ -d "$(DIR_OBJ_NM_)" ]; then 								\
-		printf "[$(PROJECT_NM)] Directoy";							\
-		if [ -d "$(DIR_OBJ_OTO)" ]; then							\
-			rm -rf $(DIR_OBJ_NM_);									\
-			printf " \'$(DIR_OBJ_NM_)\'";							\
-		else														\
-			rm -rf $(DIR_OBJ);										\
-			printf " \'$(DIR_OBJ)\'";								\
-		fi ;														\
-		printf " removed.\n";										\
-	fi
-
-clean_otool:
-
-clean:
-	@if [ -d "$(DIR_OBJ)" ]; then									\
-		rm -rf $(DIR_OBJ);											\
-		printf "[ALL] Obj removed.\n";								\
-	fi
+fclean:
+	@rm -rf $(DIR_OBJ_)
+	@rm -rf $(NAMES___)
 
 # if [[ -d "$(DIR_OBJ_NM_)" && ! -d "$(DIR_OBJ_OTO)" ]]; then	\
 # 	printf "[$(PROJECT_NM)]";								\

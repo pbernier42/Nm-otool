@@ -1,7 +1,6 @@
-make fclean
-make ft_otool
+make $1
 echo ""
-./ft_otool $1 $2 $3
+./$1 $2 $3 $4
 
 #./ft_otool $1 $2 $3 > result1
 # otool $1 $2 $3 > result2

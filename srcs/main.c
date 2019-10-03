@@ -10,14 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <ft_otool.h>
+#include <nm_otool.h>
 
 int		main(int argc, char **argv)
 {
 	t_flags	flags;
 	int		files;
 
-	if ((files = check_usage(argc, argv, &flags, ft_otool)) == RETURN_FAIL)
+	if ((files = check_usage(argc, argv, &flags)) == RETURN_FAIL)
 		return (RETURN_FAIL);
 	while (argv[files] && !open_file(argv[files], &flags))
 		++files;

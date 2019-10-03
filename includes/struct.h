@@ -13,7 +13,6 @@
 #ifndef STRUCT_H
 # define STRUCT_H
 
-# include <ft_otool.h>
 # include <stdint.h>
 # include <utils.h>
 

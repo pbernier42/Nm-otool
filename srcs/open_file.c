@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ft_otool.h>
+#include <nm_otool.h>
 
 int		open_file(char *file, t_flags *flags)
 {
@@ -19,26 +19,26 @@ int		open_file(char *file, t_flags *flags)
 	void		*data;
 	int			ret;
 
-	ERROR_INIT(file);
+	ERROR_INIT_FILE(file);
 	if ((fd = open(file, O_RDONLY)) < 0)
-		return (error_otool(error_open(fd)));
+		return (error(error_open(fd)));
 	if (fstat(fd, &buf) != 0)
-		return (error_otool(ERROR_FILE_PERMISSION));
+		return (error(ERROR_FILE_PERMISSION));
 	if (S_ISDIR(buf.st_mode))
-		return (error_otool(ERROR_FILE_IS_DIRECTORY));
+		return (error(ERROR_FILE_IS_DIRECTORY));
 	data = mmap(NULL, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
 	ret = close(fd);
 	if (data == MAP_FAILED)
-		error_otool(ERROR_ALLOC_MMAP);
+		error(ERROR_ALLOC_MMAP);
 	if (ret)
-		return (error_otool(ERROR_FILE_CLOSE));
+		return (error(ERROR_FILE_CLOSE));
 	if (data == MAP_FAILED)
 		return (RETURN_FAIL);
 	(void)buf.st_size;
 	if (type_file(file, data, flags))
 		return (RETURN_FAIL);
 	if (munmap(data, buf.st_size))
-		return(error_otool(ERROR_ALLOC_MUNMAP));
+		return(error(ERROR_ALLOC_MUNMAP));
 	return (RETURN_SUCESS);
 }
 
@@ -49,13 +49,13 @@ int		type_file(char *file, void *data, t_flags *flags)
 	t_eflags	flag;
 
 	if (!data)
-		return (error_otool(ERROR_CORRUPT_EMPTY));
+		return (error(ERROR_CORRUPT_EMPTY));
 	magic = data;
 	i = 0;
 	while (i < (NUM_TYPE * 2) && *magic != TAB_MAGIC[i])
 		++i;
 	if (i == (NUM_TYPE * 2))
-		return (error_otool(ERROR_FILE_TYPE));
+		return (error(ERROR_FILE_TYPE));
 	while ((flag = what_flag((char *)flags)) != e_no_flags)
 	{
 		//TMP /!!
