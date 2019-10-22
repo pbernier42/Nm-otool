@@ -16,6 +16,7 @@ int		read_match_command(t_match match)
 {
 	uint32_t		count_section;
 
+
 	count_section = 0;
 	SECTION = COMMAND + M_SIZEOF_SEGM;
 	while (count_section++ < SEGMENT_NSECTS)

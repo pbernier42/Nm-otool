@@ -19,7 +19,7 @@ int		error_usage(e_fonction fonction)
 	if (!fonction)
 	{
 		errno = error_usage_fonction;
-		write(2, "error: Executable's name must be", 32);
+		write(2, "error: Executable's name must be ", 33);
 		write(2, "\'ft_nm\' or \'ft_otool\'\n", 25);
 		return (RETURN_FAIL);
 	}

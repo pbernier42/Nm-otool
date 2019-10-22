@@ -3,11 +3,11 @@ all_test=$(ls -R ./break-nm-master/feed_the_nm/*)
 make ft_otool
 
 for file in $all_test; do
-	otool -t $file > .mine
-	./ft_otool -t $file > .real
+	otool -t $file > .real
+	./ft_otool -t $file > .mine
 	echo "[$file]"
-	ret=$(diff .real .mine)
 
+	ret=$(diff .real .mine)
 	if [[ ! -z $ret  ]]; then
 		read
 		./ft_otool -t $file

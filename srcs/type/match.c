@@ -55,6 +55,15 @@ int		read_match_file(t_match match)
 	uint32_t		count_command;
 
 	count_command = 0;
+	// printf("magic = [%08.8x]\n", ((t_mh_head_32*)match.header)->magic);
+	// printf("cputy = [%d]\n", ((t_mh_head_32*)match.header)->cputype);
+	// printf("cpusu = [%d]\n", ((t_mh_head_32*)match.header)->cpusubtype);
+	// printf("filet = [%u]\n", ((t_mh_head_32*)match.header)->filetype);
+	// printf("ncmds = [%u]\n", ((t_mh_head_32*)match.header)->ncmds);
+	// printf("s_com = [%u]\n", ((t_mh_head_32*)match.header)->sizeofcmds);
+	// printf("flags = [%u]\n", ((t_mh_head_32*)match.header)->flags);
+
+
 	while (count_command++ < match.ncmds)
 	{
 		if (FLAG == e_symbols_file

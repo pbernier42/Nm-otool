@@ -51,6 +51,8 @@ int		type_file(char *file, void *data, t_flags *flags)
 	if (!data)
 		return (error(ERROR_CORRUPT_EMPTY));
 	magic = data;
+	//printf("[%08.8x]\n", *magic);
+	//return (RETURN_SUCESS);
 	i = 0;
 	while (i < (NUM_TYPE * 2) && *magic != TAB_MAGIC[i])
 		++i;
@@ -66,7 +68,7 @@ int		type_file(char *file, void *data, t_flags *flags)
 				write(1, file, len_text(file));
 				write(1, ":\n", 2);
 			}
-			//printf("[%i][%i]\n", i % NUM_TYPE, i);
+			//printf("[%i][%i]\n", i, i % NUM_TYPE);
 			if (TAB_FT[i % NUM_TYPE](data, (i >= NUM_TYPE) ? true : false, flag))
 				return (RETURN_FAIL);
 		}

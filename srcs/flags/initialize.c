@@ -39,6 +39,8 @@ int			check_usage(int argc, char **argv, t_flags *flags)
 
 e_fonction	check_fonction(char *name)
 {
+	return (ft_otool);
+	printf("[%s]\n", name);
 	if (name && same_text(name, "./ft_otool"))
 		return (ft_otool);
 	else if (name && same_text(name, "./ft_nm"))

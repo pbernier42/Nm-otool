@@ -12,43 +12,43 @@
 
 #include <nm_otool.h>
 
-int		read_fat(void *data, bool endian, t_eflags flag)
+int		read_fat_32(void *data, bool endian, t_eflags flag)
+{
+	t_fat	fat;
+
+	fat.header = data;
+	fat.arch = data + sizeof(t_ft_head*);
+	fat.sizeof_arch = sizeof(t_ft_arch_32*);
+	fat.endian = endian;
+	fat.flag = flag;
+	return (read_fat_file(fat));
+}
+
+int		read_fat_64(void *data, bool endian, t_eflags flag)
+{
+	t_fat	fat;
+
+	fat.header = data;
+	fat.arch = data + sizeof(t_ft_head*);
+	fat.sizeof_arch = sizeof(t_ft_arch_64*);
+	fat.endian = endian;
+	fat.flag = flag;
+	return (read_fat_file(fat));
+}
+
+int		read_fat_file(t_fat fat)
 {
 	uint32_t		count_arch;
 
-	count_arch = ((t_ft_head*)data)->nfat_arch;
-	// printf("[%u]\n", ((t_ft_head*)data)->magic);
-	// printf("[%u]\n", ((t_ft_head*)data)->nfat_arch);
-	//while (count_arch++ < ((t_ft_head*)data)->nfat_arch )
-	// {
-	// 	printf("hh\n");
-	// }
-	// printf("[%u]\n[%u]\n",
-	// ((t_ft_arch_64*)(data + sizeof(t_ft_head)))->cputype,
-	// ((t_ft_arch_64*)(data + sizeof(t_ft_head)))->cpusubtype);
-
-	data += sizeof(t_ft_head*);
+	count_arch = ((t_ft_head*)(fat.header))->nfat_arch;
 	while (count_arch--)
 	{
-		//printf("[%llu]\n", ((t_ft_arch_64*)(data))->offset);
-		if (((t_ft_arch_32*)(data))->offset == MH_CIGAM_64 ||
-			((t_ft_arch_32*)(data))->offset == MH_MAGIC_64 ||
-			((t_ft_arch_32*)(data))->offset == MH_MAGIC ||
-			((t_ft_arch_32*)(data))->offset == MH_CIGAM)
-			{
-				data = &((t_ft_arch_32*)(data))->offset;
-				printf("[%u]\n", ((t_ft_head*)data)->magic);
-				printf("[%u]\n", ((t_ft_head*)data)->nfat_arch);
-				return (RETURN_SUCESS);
-			}
-		else
-			printf(".");
-		data += sizeof(t_ft_arch_32*);
+		if (OFFSET == MH_MAGIC)
+			return (read_match_32(&OFFSET, fat.endian, fat.flag));
+		if (OFFSET == MH_MAGIC_64)
+			return (read_match_64(&OFFSET, fat.endian, fat.flag));
+		fat.arch += fat.sizeof_arch;
 	}
-
-	(void)data;
-	(void)endian;
-	(void)flag;
-	printf("OUEXH\n");
-	return (RETURN_SUCESS);
+	//error pas trouvé magic
+	return (RETURN_FAIL);
 }
