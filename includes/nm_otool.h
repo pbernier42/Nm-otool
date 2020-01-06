@@ -52,7 +52,7 @@ int			check_flags(char *argv, char *flags);
 # define ALL_MAGIC		MH_MAGIC, MH_MAGIC_64, FAT_MAGIC, FAT_MAGIC_64, ARC_MAGIC
 # define ALL_CIGAM		MH_CIGAM, MH_CIGAM_64, FAT_CIGAM, FAT_CIGAM_64, ARC_CIGAM
 # define TAB_MAGIC		((uint32_t[NUM_TYPE * 2]){ALL_MAGIC, ALL_CIGAM})
-# define ALL_FT			read_match_32, read_match_64, read_fat_32, read_fat_64, NULL
+# define ALL_FT			read_match_32, read_match_64, read_fat_32, read_fat_64, read_fat_64
 # define TAB_FT			((int ((*[NUM_TYPE])(void *, bool, t_eflags))){ALL_FT})
 
 typedef enum e_flags	t_eflags;
@@ -91,7 +91,7 @@ struct						s_match
 	t_mh_comm	*command;
 	void		*section;
 	bool		endian;
-	bool		__pad1[2];
+	char		__pad1[3];
 	short		tab[4];
 	t_eflags	flag;
 };

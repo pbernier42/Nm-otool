@@ -41,12 +41,20 @@ int		read_fat_file(t_fat fat)
 	uint32_t		count_arch;
 
 	count_arch = ((t_ft_head*)(fat.header))->nfat_arch;
+	//printf("[%.8X]\n", count_arch);
 	while (count_arch--)
 	{
 		if (OFFSET == MH_MAGIC)
+		{
+			//printf("1\n");
 			return (read_match_32(&OFFSET, fat.endian, fat.flag));
+		}
 		if (OFFSET == MH_MAGIC_64)
+		{
+			//printf("2\n");
 			return (read_match_64(&OFFSET, fat.endian, fat.flag));
+		}
+
 		fat.arch += fat.sizeof_arch;
 	}
 	//error pas trouvé magic
